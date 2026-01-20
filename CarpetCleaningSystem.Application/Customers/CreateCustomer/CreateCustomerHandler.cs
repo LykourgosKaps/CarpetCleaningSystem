@@ -8,6 +8,6 @@ namespace CarpetCleaningSystem.Application.Customers.CreateCustomer
 {
     public class CreateCustomerHandler
     {
-
+        
     }
 }

@@ -8,12 +8,14 @@ namespace CarpetCleaningSystem.Domain.Entities
     public class Customer
     {
         public int CustomerId { get; private set; }
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
-        public string PhoneNumber { get; private set; }
-        public string Address { get; private set; }
+        public string FirstName { get; private set; } = null!;
+        public string LastName { get; private set; } = null!;
+        public string PhoneNumber { get; private set; } = null!;
+        public string Address { get; private set; } = null!;
 
         public CustomerStatus Status { get; private set; }
+
+        public Customer() { }
 
         private Customer (int customerId, string firstName, string lastName, string phoneNumber, string address) 
         {
