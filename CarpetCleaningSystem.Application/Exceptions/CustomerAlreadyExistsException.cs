@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace CarpetCleaningSystem.Application.Exceptions
 {
-    internal class CustomerAlreadyExistsException
+    public class CustomerAlreadyExistsException : Exception
     {
+        public CustomerAlreadyExistsException(string phoneNumber)
+            : base($"A customer with phone number '{phoneNumber}' already exists.")
+        {
+        }
     }
 }
