@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarpetCleaningSystem.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace CarpetCleaningSystem.Application.Abstractions.Repositories
 {
-    internal class ICustomerRepository
+    public interface ICustomerRepository
     {
+        Task<bool> ExistsByPhoneAsync(string phoneNumber, CancellationToken ct);
+        Task AddAsync(Customer customer, CancellationToken ct);
     }
 }
