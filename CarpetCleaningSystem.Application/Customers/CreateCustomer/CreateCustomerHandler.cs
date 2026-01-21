@@ -1,4 +1,5 @@
 ﻿using CarpetCleaningSystem.Application.Abstractions.Repositories;
+using CarpetCleaningSystem.Application.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,13 @@ namespace CarpetCleaningSystem.Application.Customers.CreateCustomer
             _customerRepository = customerRepository;
         }
 
-        Task<CreateCustomerResponse> Handle(CreateCustomerCommand request, CancellationToken ct)
+        async Task<CreateCustomerResponse> Handle(CreateCustomerCommand request, CancellationToken ct)
         {
+            var phone = request.PhoneNumber.Trim();
+
+            var exists = await _customerRepository.ExistsByPhoneAsync(phone, ct);
+
+            if (exists) throw new CustomerAlreadyExistsException(phone);
 
             throw new NotImplementedException();
         }
