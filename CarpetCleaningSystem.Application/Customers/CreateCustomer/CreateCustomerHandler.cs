@@ -1,5 +1,6 @@
 ﻿using CarpetCleaningSystem.Application.Abstractions.Repositories;
 using CarpetCleaningSystem.Application.Exceptions;
+using CarpetCleaningSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,12 @@ namespace CarpetCleaningSystem.Application.Customers.CreateCustomer
     {
         private readonly ICustomerRepository _customerRepository;
 
-        public CreateCustomerHandler(ICustomerRepository customerRepository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public CreateCustomerHandler(ICustomerRepository customerRepository, IUnitOfWork unitOfWork)
         {
             _customerRepository = customerRepository;
+            _unitOfWork = unitOfWork;
         }
 
         async Task<CreateCustomerResponse> Handle(CreateCustomerCommand request, CancellationToken ct)
@@ -25,7 +29,19 @@ namespace CarpetCleaningSystem.Application.Customers.CreateCustomer
 
             if (exists) throw new CustomerAlreadyExistsException(phone);
 
-            throw new NotImplementedException();
+            var customer = Customer.Create(
+                request.FirstName.Trim(),
+                request.LastName.Trim(),
+                phone,
+                request.Address.Trim());
+
+            // Add the new customer to the repository
+            await _customerRepository.AddAsync(customer, ct);
+
+            // Transaction boundary of the use case
+            await _unitOfWork.SaveChangesAsync(ct);
+
+            return new CreateCustomerResponse(customer.CustomerId);
         }
     }
 }
