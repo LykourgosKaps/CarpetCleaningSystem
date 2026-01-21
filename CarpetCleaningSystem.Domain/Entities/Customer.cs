@@ -17,19 +17,16 @@ namespace CarpetCleaningSystem.Domain.Entities
 
         public Customer() { }
 
-        private Customer (int customerId, string firstName, string lastName, string phoneNumber, string address) 
+        private Customer (string firstName, string lastName, string phoneNumber, string address) 
         {
-            this.CustomerId = customerId;
             this.FirstName = firstName;
             this.LastName = lastName;
             this.PhoneNumber = phoneNumber;
             this.Address = address;
         }
 
-        public static Customer Create(int customerId, string firstName, string lastName, string phoneNumber, string address)
+        public static Customer Create(string firstName, string lastName, string phoneNumber, string address)
         {
-            if (customerId <= 0) 
-                throw new ArgumentException("Customer ID must be a positive integer.", nameof(customerId));
 
             if (string.IsNullOrWhiteSpace(firstName))
                 throw new ArgumentException("First name cannot be empty.", nameof(firstName));
@@ -43,7 +40,7 @@ namespace CarpetCleaningSystem.Domain.Entities
             if (string.IsNullOrWhiteSpace(address))
                 throw new ArgumentException("Address cannot be empty.", nameof(address));
 
-            var customer = new Customer(customerId, firstName, lastName, phoneNumber, address)
+            var customer = new Customer(firstName, lastName, phoneNumber, address)
             {
                 Status = CustomerStatus.Active // Default status
             };
