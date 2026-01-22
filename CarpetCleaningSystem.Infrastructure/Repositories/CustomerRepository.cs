@@ -1,4 +1,8 @@
-﻿using System;
+﻿using CarpetCleaningSystem.Application.Abstractions.Repositories;
+using CarpetCleaningSystem.Domain.Entities;
+using CarpetCleaningSystem.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +10,24 @@ using System.Threading.Tasks;
 
 namespace CarpetCleaningSystem.Infrastructure.Repositories
 {
-    internal class CustomerRepository
+    public class CustomerRepository : ICustomerRepository
     {
+        private readonly AppDBContext _context;
+
+        public CustomerRepository(AppDBContext context)
+        {
+            _context = context;
+        }
+
+        public async Task AddAsync(Customer customer, CancellationToken ct)
+        {
+            await _context.Customers.AddAsync(customer, ct);
+        }
+
+        public async Task<bool> ExistsByPhoneAsync(string phoneNumber, CancellationToken ct)
+        {
+            return await _context.Customers
+                .AnyAsync(x => x.PhoneNumber == phoneNumber, ct);
+        }
     }
 }
