@@ -1,4 +1,5 @@
 using CarpetCleaningSystem.Application.Abstractions.Repositories;
+using CarpetCleaningSystem.Application.Customers.CreateCustomer;
 using CarpetCleaningSystem.Infrastructure.Persistence;
 using CarpetCleaningSystem.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -19,11 +20,13 @@ namespace CarpetCleaningSystem.API
             //  Repositories & UoW
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<CreateCustomerHandler>();
 
             //  API stuff
             builder.Services.AddAuthorization();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddControllers();
 
             var app = builder.Build();
 
@@ -35,6 +38,8 @@ namespace CarpetCleaningSystem.API
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
+
+            app.MapControllers();
 
             app.Run();
         }
