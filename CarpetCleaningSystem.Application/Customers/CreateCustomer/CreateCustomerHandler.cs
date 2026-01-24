@@ -21,7 +21,7 @@ namespace CarpetCleaningSystem.Application.Customers.CreateCustomer
             _unitOfWork = unitOfWork;
         }
 
-        async Task<CreateCustomerResponse> Handle(CreateCustomerCommand request, CancellationToken ct)
+        public async Task<CreateCustomerResponse> Handle(CreateCustomerCommand request, CancellationToken ct)
         {
             var phone = request.PhoneNumber.Trim();
 
