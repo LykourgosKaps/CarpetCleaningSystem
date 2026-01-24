@@ -11,5 +11,7 @@ namespace CarpetCleaningSystem.Application.Abstractions.Repositories
     {
         Task<bool> ExistsByPhoneAsync(string phoneNumber, CancellationToken ct);
         Task AddAsync(Customer customer, CancellationToken ct);
+
+        Task<Customer?> GetByIdAsync(int customerId, CancellationToken ct);
     }
 }
