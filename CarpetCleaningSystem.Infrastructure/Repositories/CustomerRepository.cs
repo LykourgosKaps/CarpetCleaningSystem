@@ -29,5 +29,11 @@ namespace CarpetCleaningSystem.Infrastructure.Repositories
             return await _context.Customers
                 .AnyAsync(x => x.PhoneNumber == phoneNumber, ct);
         }
+
+        public async Task<Customer?> GetByIdAsync(int customerId, CancellationToken ct)
+        {
+            return await _context.Customers
+                .FindAsync(new object[] { customerId }, ct);
+        }
     }
 }
