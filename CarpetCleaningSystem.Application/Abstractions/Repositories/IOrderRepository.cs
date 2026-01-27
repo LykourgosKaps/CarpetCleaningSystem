@@ -12,5 +12,7 @@ namespace CarpetCleaningSystem.Application.Abstractions.Repositories
         Task AddAsync(Order order, CancellationToken cancellationToken);
 
         Task<Order?> GetByIdAsync(int orderId, CancellationToken cancellationToken);
+
+        Task<Order?> GetByIdWithItemsAsync(int orderId, CancellationToken cancellationToken);
     }
 }
