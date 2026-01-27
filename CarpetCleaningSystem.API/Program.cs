@@ -23,6 +23,7 @@ namespace CarpetCleaningSystem.API
 
             //  Repositories & UoW
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<CreateCustomerHandler>();
             builder.Services.AddScoped<GetCustomerByIdHandler>();
