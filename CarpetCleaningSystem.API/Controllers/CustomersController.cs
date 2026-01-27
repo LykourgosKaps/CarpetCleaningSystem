@@ -1,8 +1,10 @@
 ﻿using CarpetCleaningSystem.Application.Customers.CreateCustomer;
 using CarpetCleaningSystem.Application.Customers.GetCustomerById;
+using CarpetCleaningSystem.Application.Customers.UpdateCustomer;
 using CarpetCleaningSystem.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 
 namespace CarpetCleaningSystem.API.Controllers
 {
@@ -14,10 +16,13 @@ namespace CarpetCleaningSystem.API.Controllers
 
         private readonly GetCustomerByIdHandler _getHandler;
 
-        public CustomersController(CreateCustomerHandler handler, GetCustomerByIdHandler getHandler)
+        private readonly UpdateCustomerHandler _updateHandler;
+
+        public CustomersController(CreateCustomerHandler handler, GetCustomerByIdHandler getHandler, UpdateCustomerHandler updateCustomerHandler)
         {
             _handler = handler;
             _getHandler = getHandler;
+            _updateHandler = updateCustomerHandler;
         }
 
         [HttpPost]
@@ -37,16 +42,15 @@ namespace CarpetCleaningSystem.API.Controllers
         {
             var query = new GetCustomerByIdQuery { CustomerId = customerId };
 
-            try
-            {
-                var response = await _getHandler.Handle(query, ct);
-                return Ok(response);
-            }
-            catch (CustomerNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
+            var response = await _getHandler.Handle(query, ct);
+            return Ok(response);
         }
 
+        [HttpPut("{customerId:int}")]
+        public async Task<IActionResult> UpdateCustomer(int customerId, [FromBody] UpdateCustomerCommand command, CancellationToken ct)
+        {
+            await _updateHandler.Handle(command, customerId, ct);
+            return NoContent();
+        }
     }
 }
