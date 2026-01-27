@@ -24,10 +24,10 @@ namespace CarpetCleaningSystem.Infrastructure.Repositories
             await _context.Customers.AddAsync(customer, ct);
         }
 
-        public async Task<bool> ExistsByPhoneAsync(string phoneNumber, CancellationToken ct)
+        public async Task<bool> ExistsByPhoneAsync(string phoneNumber, int excludeCustomerId, CancellationToken ct)
         {
             return await _context.Customers
-                .AnyAsync(x => x.PhoneNumber == phoneNumber, ct);
+                .AnyAsync(x => (x.PhoneNumber == phoneNumber && x.CustomerId != excludeCustomerId), ct);
         }
 
         public async Task<Customer?> GetByIdAsync(int customerId, CancellationToken ct)
