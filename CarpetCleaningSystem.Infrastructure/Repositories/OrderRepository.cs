@@ -1,6 +1,7 @@
 ﻿using CarpetCleaningSystem.Application.Abstractions.Repositories;
 using CarpetCleaningSystem.Domain.Entities;
 using CarpetCleaningSystem.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,13 @@ namespace CarpetCleaningSystem.Infrastructure.Repositories
         public async Task<Order?> GetByIdAsync(int orderId, CancellationToken ct)
         {
             return await _context.Orders.FindAsync(new object[] { orderId }, ct);
+        }
+
+        public async Task<Order?> GetByIdWithItemsAsync(int orderId, CancellationToken ct)
+        {
+            return await _context.Orders
+                .Include(o => o.Items) 
+                .FirstOrDefaultAsync(o => o.OrderId == orderId, ct);
         }
     }
 }
