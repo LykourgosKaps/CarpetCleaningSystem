@@ -25,7 +25,7 @@ namespace CarpetCleaningSystem.Application.Customers.CreateCustomer
         {
             var phone = request.PhoneNumber.Trim();
 
-            var exists = await _customerRepository.ExistsByPhoneAsync(phone, ct);
+            var exists = await _customerRepository.ExistsByPhoneAsync(phone, excludeCustomerId: 0,ct);
 
             if (exists) throw new CustomerAlreadyExistsException(phone);
 
