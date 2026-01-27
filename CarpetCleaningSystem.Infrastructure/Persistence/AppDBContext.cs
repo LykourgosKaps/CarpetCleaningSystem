@@ -17,6 +17,8 @@ namespace CarpetCleaningSystem.Infrastructure.Persistence
 
         public DbSet<Customer> Customers => Set<Customer>();
 
+        public DbSet<Order> Orders => Set<Order>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
