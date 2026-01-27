@@ -1,4 +1,5 @@
 ﻿using CarpetCleaningSystem.Application.Orders.CreateOrder;
+using CarpetCleaningSystem.Application.Orders.GetOrderById;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +11,12 @@ namespace CarpetCleaningSystem.API.Controllers
     {
         private readonly CreateOrderHandler _handler;
 
-        public OrdersController(CreateOrderHandler handler)
+        private readonly GetOrderByIdHandler _getOrderHandler;
+
+        public OrdersController(CreateOrderHandler handler, GetOrderByIdHandler getOrderByIdHandler)
         {
             _handler = handler;
+            _getOrderHandler = getOrderByIdHandler;
         }
 
         [HttpPost]
@@ -21,6 +25,13 @@ namespace CarpetCleaningSystem.API.Controllers
             var response = await _handler.Handle(command, ct);
             return Created(string.Empty, response);
 
+        }
+
+        [HttpGet("{orderId:int}")]
+        public async Task<IActionResult> GetOrderById([FromBody] GetOrderByIdQuery command, CancellationToken ct)
+        {
+            var response = await _getOrderHandler.Handle(command, ct);
+            return Ok(response);
         }
     }
 }
