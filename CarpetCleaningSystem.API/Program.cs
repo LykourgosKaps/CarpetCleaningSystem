@@ -2,6 +2,7 @@ using CarpetCleaningSystem.API.Middlewares;
 using CarpetCleaningSystem.Application.Abstractions.Repositories;
 using CarpetCleaningSystem.Application.Customers.CreateCustomer;
 using CarpetCleaningSystem.Application.Customers.GetCustomerById;
+using CarpetCleaningSystem.Application.Customers.UpdateCustomer;
 using CarpetCleaningSystem.Infrastructure.Persistence;
 using CarpetCleaningSystem.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,7 @@ namespace CarpetCleaningSystem.API
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<CreateCustomerHandler>();
             builder.Services.AddScoped<GetCustomerByIdHandler>();
+            builder.Services.AddScoped<UpdateCustomerHandler>();
 
             //  API stuff
             builder.Services.AddAuthorization();
