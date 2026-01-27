@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarpetCleaningSystem.Application.Orders
+namespace CarpetCleaningSystem.Application.Orders.CreateOrder
 {
     public class CreateOrderCommand
     {
