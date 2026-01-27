@@ -30,6 +30,7 @@ namespace CarpetCleaningSystem.API.Middlewares
             var statusCode = ex switch
             {
                 CustomerNotFoundException => HttpStatusCode.NotFound,
+                OrderNotFoundException => HttpStatusCode.NotFound,
                 PhoneNumberAlreadyInUseException => HttpStatusCode.Conflict,
                 ArgumentException => HttpStatusCode.BadRequest,
                 _ => HttpStatusCode.InternalServerError
