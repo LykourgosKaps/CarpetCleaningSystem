@@ -1,3 +1,4 @@
+using CarpetCleaningSystem.API.Middlewares;
 using CarpetCleaningSystem.Application.Abstractions.Repositories;
 using CarpetCleaningSystem.Application.Customers.CreateCustomer;
 using CarpetCleaningSystem.Application.Customers.GetCustomerById;
@@ -39,7 +40,11 @@ namespace CarpetCleaningSystem.API
             }
 
             app.UseHttpsRedirection();
-            app.UseAuthorization();
+
+            app.UseMiddleware<GlobalExceptionMiddleware>();
+
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.MapControllers();
 
