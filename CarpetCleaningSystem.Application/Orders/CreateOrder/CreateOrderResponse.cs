@@ -9,5 +9,10 @@ namespace CarpetCleaningSystem.Application.Orders.CreateOrder
     public class CreateOrderResponse
     {
         public int OrderId { get; }
+
+        public CreateOrderResponse(int orderId)
+        {
+            OrderId = orderId;
+        }
     }
 }
