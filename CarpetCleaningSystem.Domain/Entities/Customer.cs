@@ -49,6 +49,8 @@ namespace CarpetCleaningSystem.Domain.Entities
 
         public void UpdateName(string firstName, string lastName)
         {
+            if (Status == CustomerStatus.Deactivated)
+                throw new InvalidOperationException("Cannot update firstname and lastname a deactivated customer.");
             if (string.IsNullOrWhiteSpace(firstName))
                 throw new ArgumentException("First name cannot be empty.", nameof(firstName));
             if (string.IsNullOrWhiteSpace(lastName))
@@ -59,6 +61,8 @@ namespace CarpetCleaningSystem.Domain.Entities
 
         public void UpdateContactInfo(string phoneNumber, string address)
         {
+            if (Status == CustomerStatus.Deactivated)
+                throw new InvalidOperationException("Cannot update contact info a deactivated customer.");
             if (string.IsNullOrWhiteSpace(phoneNumber))
                 throw new ArgumentException("Phone number cannot be empty.", nameof(phoneNumber));
             if (string.IsNullOrWhiteSpace(address))
