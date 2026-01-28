@@ -8,7 +8,7 @@ namespace CarpetCleaningSystem.Application.Customers.CreateCustomer
 {
     public class CreateCustomerResponse
     {
-        public int CustomerId { get; } 
+        public int CustomerId { get; set;  } 
 
     }
 }
