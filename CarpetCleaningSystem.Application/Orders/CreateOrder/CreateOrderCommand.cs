@@ -10,9 +10,10 @@ namespace CarpetCleaningSystem.Application.Orders.CreateOrder
     public class CreateOrderCommand
     {
         [Required]
-        [Range(1, int.MaxValue)]
+        [MinLength(1)]
         public List<CreateOrderItemDTO> Items { get; set; } = new();
 
+        [Required]
         public DateTime? PickUpDate { get; set; }
     }
 }
