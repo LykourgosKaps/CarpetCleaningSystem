@@ -15,11 +15,11 @@ namespace CarpetCleaningSystem.Infrastructure.Persistence.EntityTypeConfiguratio
         {
             builder.ToTable("OrderItems");
 
-            // PK (global unique)
+            // PK = CarpetLabelNumber (shared with Carpet)
             builder.HasKey(x => x.CarpetLabelNumber);
 
             builder.Property(x => x.CarpetLabelNumber)
-                   .IsRequired();
+                   .ValueGeneratedNever();
 
             builder.Property(x => x.CleaningType)
                    .IsRequired()
@@ -29,7 +29,7 @@ namespace CarpetCleaningSystem.Infrastructure.Persistence.EntityTypeConfiguratio
                    .IsRequired()
                    .HasPrecision(18, 2);
 
-            // Shadow FK προς Order
+            // ---------- Relation to Order (shadow FK) ----------
             builder.Property<int>("OrderId");
 
             builder.HasIndex("OrderId");
@@ -38,6 +38,14 @@ namespace CarpetCleaningSystem.Infrastructure.Persistence.EntityTypeConfiguratio
                    .WithMany("Items")
                    .HasForeignKey("OrderId")
                    .OnDelete(DeleteBehavior.Cascade);
+
+            // ---------- Relation to Carpet (1-1, shared PK) ----------
+            builder.HasOne<Carpet>()
+                   .WithOne()
+                   .HasForeignKey<OrderItem>(x => x.CarpetLabelNumber)
+                   .HasPrincipalKey<Carpet>(c => c.CarpetLabelNumber)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
+
 }
