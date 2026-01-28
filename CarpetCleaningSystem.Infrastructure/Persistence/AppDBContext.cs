@@ -19,7 +19,7 @@ namespace CarpetCleaningSystem.Infrastructure.Persistence
 
         public DbSet<Order> Orders => Set<Order>();
 
-        public DbSet<Carpet> Services => Set<Carpet>();
+        public DbSet<Carpet> Carpets => Set<Carpet>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
