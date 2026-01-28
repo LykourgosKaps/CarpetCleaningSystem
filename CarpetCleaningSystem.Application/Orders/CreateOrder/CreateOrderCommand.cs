@@ -14,6 +14,6 @@ namespace CarpetCleaningSystem.Application.Orders.CreateOrder
         public List<CreateOrderItemDTO> Items { get; set; } = new();
 
         [Required]
-        public DateTime? PickUpDate { get; set; }
+        public DateTime PickUpDate { get; set; }
     }
 }
