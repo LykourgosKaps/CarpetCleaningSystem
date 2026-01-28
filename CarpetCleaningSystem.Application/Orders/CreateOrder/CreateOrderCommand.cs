@@ -11,7 +11,7 @@ namespace CarpetCleaningSystem.Application.Orders.CreateOrder
     {
         [Required]
         [Range(1, int.MaxValue)]
-        public int CustomerId { get; set; }
+        public List<CreateOrderItemDTO> Items { get; set; } = new();
 
         public DateTime? PickUpDate { get; set; }
     }
