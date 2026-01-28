@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarpetCleaningSystem.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,15 @@ namespace CarpetCleaningSystem.Application.Orders.CreateOrder
 {
     public class CreateOrderResponse
     {
-        public int OrderId { get; }
+        public int OrderId { get; set; }
 
-        public CreateOrderResponse(int orderId)
-        {
-            OrderId = orderId;
-        }
+        public List<CreateOrderItemResponseDTO> Items { get; set; } = new();
+
+        public DateTime PickUpDate { get; set; }
+
+        public decimal TotalPrice { get; set; }
+
+        public OrderStatus Status { get; set; }
+
     }
 }
