@@ -10,8 +10,8 @@ namespace CarpetCleaningSystem.Domain.Entities
         public decimal Width { get; private set; }
         public decimal Length { get; private set; }
 
-        // αυτό που είπες: π.χ. Handmade/Blanket/etc (βάλε enum που έχεις ή θα φτιάξεις)
-        public CarpetMaterial Material { get; private set; }  // ή ItemType/CarpetType αν έχεις άλλο enum
+        
+        public CarpetMaterial Material { get; private set; }  
 
         public CleaningType CleaningType { get; private set; }
 

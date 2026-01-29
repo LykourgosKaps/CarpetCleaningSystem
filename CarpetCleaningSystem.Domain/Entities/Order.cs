@@ -14,25 +14,28 @@ namespace CarpetCleaningSystem.Domain.Entities
         public IReadOnlyCollection<OrderItem> Items => _items;
 
         public OrderStatus Status { get; private set; }
-
         public DateTime CreatedAt { get; private set; }
-        public DateTime? PickUpDate { get; private set; }
+        public DateTime PickUpDate { get; private set; }
         public DateTime? DeliveryDate { get; private set; }
 
         private Order() { } // For EF
 
-        private Order(int customerId)
+        private Order(int customerId, DateTime pickUpDate)
         {
             if (customerId <= 0)
                 throw new ArgumentException("CustomerId must be greater than zero.", nameof(customerId));
 
+            if (pickUpDate == DateTime.MinValue)
+                throw new ArgumentException("Pick-up date must be a valid date.", nameof(pickUpDate));
+
             CustomerId = customerId;
             CreatedAt = DateTime.UtcNow;
+            PickUpDate = pickUpDate;
             Status = OrderStatus.DRAFT;
         }
 
-        public static Order Create(int customerId)
-            => new Order(customerId);
+        public static Order Create(int customerId, DateTime pickUpDate)
+            => new Order(customerId, pickUpDate);
 
         public void AddItem(OrderItem item)
         {
@@ -55,21 +58,6 @@ namespace CarpetCleaningSystem.Domain.Entities
             _items.Remove(item);
         }
 
-
-        public void SetPickUpDate(DateTime pickUpDate)
-        {
-            if (Status != OrderStatus.DRAFT)
-                throw new InvalidOperationException("Pick-up date can only be set while the order is in Draft status.");
-
-            if (pickUpDate == DateTime.MinValue)
-                throw new ArgumentException("Pick-up date must be a valid date.", nameof(pickUpDate));
-
-            if (pickUpDate < CreatedAt)
-                throw new ArgumentException("Pick-up date cannot be earlier than order creation date.", nameof(pickUpDate));
-
-            PickUpDate = pickUpDate;
-        }
-
         public void Submit()
         {
             if (Status != OrderStatus.DRAFT)
@@ -77,9 +65,6 @@ namespace CarpetCleaningSystem.Domain.Entities
 
             if (_items.Count == 0)
                 throw new InvalidOperationException("Cannot submit an order without items.");
-
-            if (PickUpDate == null)
-                throw new InvalidOperationException("Cannot submit an order without a pick-up date.");
 
             Status = OrderStatus.SUBMITTED;
         }
@@ -110,4 +95,5 @@ namespace CarpetCleaningSystem.Domain.Entities
         }
     }
 }
+
 
