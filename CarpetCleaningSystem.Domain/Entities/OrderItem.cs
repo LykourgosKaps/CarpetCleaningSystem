@@ -11,18 +11,18 @@ namespace CarpetCleaningSystem.Domain.Entities
         public decimal Length { get; private set; }
 
         
-        public CarpetMaterial Material { get; private set; }  
+        public ItemType Material { get; private set; }  
 
         public CleaningType CleaningType { get; private set; }
 
         private OrderItem() { } // For EF
 
-        private OrderItem(decimal width, decimal length, CarpetMaterial material, CleaningType cleaningType)
+        private OrderItem(decimal width, decimal length, ItemType material, CleaningType cleaningType)
         {
             if (width <= 0) throw new ArgumentException("Width must be greater than 0.", nameof(width));
             if (length <= 0) throw new ArgumentException("Length must be greater than 0.", nameof(length));
 
-            if (!Enum.IsDefined(typeof(CarpetMaterial), material))
+            if (!Enum.IsDefined(typeof(ItemType), material))
                 throw new ArgumentException("Invalid material.", nameof(material));
 
             if (!Enum.IsDefined(typeof(CleaningType), cleaningType))
@@ -34,7 +34,7 @@ namespace CarpetCleaningSystem.Domain.Entities
             CleaningType = cleaningType;
         }
 
-        public static OrderItem Create(decimal width, decimal length, CarpetMaterial material, CleaningType cleaningType)
+        public static OrderItem Create(decimal width, decimal length, ItemType material, CleaningType cleaningType)
             => new OrderItem(width, length, material, cleaningType);
 
         public void ChangeDimensions(decimal newWidth, decimal newLength)
@@ -48,9 +48,9 @@ namespace CarpetCleaningSystem.Domain.Entities
             Length = newLength;
         }
 
-        public void ChangeMaterial(CarpetMaterial newMaterial)
+        public void ChangeMaterial(ItemType newMaterial)
         {
-            if (!Enum.IsDefined(typeof(CarpetMaterial), newMaterial))
+            if (!Enum.IsDefined(typeof(ItemType), newMaterial))
                 throw new ArgumentException("Invalid material.", nameof(newMaterial));
 
             if (Material == newMaterial) return;
