@@ -6,26 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarpetCleaningSystem.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialOrderCarpetSetup : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Carpets",
-                columns: table => new
-                {
-                    CarpetLabelNumber = table.Column<int>(type: "int", nullable: false),
-                    Width = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    Length = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    Material = table.Column<int>(type: "int", nullable: false),
-                    IsLocked = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Carpets", x => x.CarpetLabelNumber);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
@@ -64,20 +49,17 @@ namespace CarpetCleaningSystem.Infrastructure.Migrations
                 name: "OrderItems",
                 columns: table => new
                 {
-                    CarpetLabelNumber = table.Column<int>(type: "int", nullable: false),
+                    OrderItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Width = table.Column<decimal>(type: "decimal(9,2)", precision: 9, scale: 2, nullable: false),
+                    Length = table.Column<decimal>(type: "decimal(9,2)", precision: 9, scale: 2, nullable: false),
+                    Material = table.Column<int>(type: "int", nullable: false),
                     CleaningType = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false)
+                    OrderId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItems", x => x.CarpetLabelNumber);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_Carpets_CarpetLabelNumber",
-                        column: x => x.CarpetLabelNumber,
-                        principalTable: "Carpets",
-                        principalColumn: "CarpetLabelNumber",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_OrderItems", x => x.OrderItemId);
                     table.ForeignKey(
                         name: "FK_OrderItems_Orders_OrderId",
                         column: x => x.OrderId,
@@ -106,9 +88,6 @@ namespace CarpetCleaningSystem.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderItems");
-
-            migrationBuilder.DropTable(
-                name: "Carpets");
 
             migrationBuilder.DropTable(
                 name: "Orders");

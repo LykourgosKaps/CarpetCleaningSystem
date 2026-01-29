@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarpetCleaningSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20260128150105_InitialOrderCarpetSetup")]
-    partial class InitialOrderCarpetSetup
+    [Migration("20260129161927_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,30 +24,6 @@ namespace CarpetCleaningSystem.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CarpetCleaningSystem.Domain.Entities.Carpet", b =>
-                {
-                    b.Property<int>("CarpetLabelNumber")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsLocked")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("Length")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Material")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Width")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("CarpetLabelNumber");
-
-                    b.ToTable("Carpets", (string)null);
-                });
 
             modelBuilder.Entity("CarpetCleaningSystem.Domain.Entities.Customer", b =>
                 {
@@ -105,8 +81,7 @@ namespace CarpetCleaningSystem.Infrastructure.Migrations
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("PickUpDate")
-                        .IsRequired()
+                    b.Property<DateTime>("PickUpDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
@@ -119,20 +94,30 @@ namespace CarpetCleaningSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("CarpetCleaningSystem.Domain.Entities.OrderItem", b =>
                 {
-                    b.Property<int>("CarpetLabelNumber")
+                    b.Property<int>("OrderItemId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
 
                     b.Property<int>("CleaningType")
                         .HasColumnType("int");
 
-                    b.Property<int>("OrderId")
+                    b.Property<decimal>("Length")
+                        .HasPrecision(9, 2)
+                        .HasColumnType("decimal(9,2)");
+
+                    b.Property<int>("Material")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
 
-                    b.HasKey("CarpetLabelNumber");
+                    b.Property<decimal>("Width")
+                        .HasPrecision(9, 2)
+                        .HasColumnType("decimal(9,2)");
+
+                    b.HasKey("OrderItemId");
 
                     b.HasIndex("OrderId");
 
@@ -141,17 +126,10 @@ namespace CarpetCleaningSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("CarpetCleaningSystem.Domain.Entities.OrderItem", b =>
                 {
-                    b.HasOne("CarpetCleaningSystem.Domain.Entities.Carpet", null)
-                        .WithOne()
-                        .HasForeignKey("CarpetCleaningSystem.Domain.Entities.OrderItem", "CarpetLabelNumber")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("CarpetCleaningSystem.Domain.Entities.Order", null)
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CarpetCleaningSystem.Domain.Entities.Order", b =>
