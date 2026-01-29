@@ -1,56 +1,54 @@
 ﻿using CarpetCleaningSystem.Domain.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarpetCleaningSystem.Domain.Entities
 {
     public class OrderItem
     {
-        public int CarpetLabelNumber { get; private set; }
+        // Primary Key (DB identity)
+        public int OrderItemId { get; private set; }
+
+        // FK προς Carpet (null μέχρι να γίνει παραλαβή / submit)
+        public int? CarpetId { get; private set; }
+        public Carpet? Carpet { get; private set; }
+
+        // Τι ζήτησε ο πελάτης
         public CleaningType CleaningType { get; private set; }
-        public decimal Price { get; private set; }
 
+        private OrderItem() { } // For EF
 
-
-        private OrderItem() { }
-
-        private OrderItem(int carpetLabelNumber, CleaningType cleaningType, decimal price)
+        private OrderItem(CleaningType cleaningType)
         {
-            if (carpetLabelNumber <= 0)
-                throw new ArgumentException("Carpet label number must be greater than 0.", nameof(carpetLabelNumber));
-
             if (!Enum.IsDefined(typeof(CleaningType), cleaningType))
                 throw new ArgumentException("Invalid cleaning type.", nameof(cleaningType));
 
-            if (price <= 0) throw new ArgumentException("Price must be greater than 0.", nameof(price));
-
-
-
-            CarpetLabelNumber = carpetLabelNumber;
             CleaningType = cleaningType;
-            Price = price;
+            CarpetId = null;
         }
 
-        public static OrderItem CreateOrderItem(int carpetLabelNumber, CleaningType cleaningType, decimal price)
+        public static OrderItem Create(CleaningType cleaningType)
+            => new OrderItem(cleaningType);
+
+        // Καλείται στο Submit / Receive flow
+        public void AssignCarpet(Carpet carpet)
         {
-            return new OrderItem(carpetLabelNumber, cleaningType, price);
+            ArgumentNullException.ThrowIfNull(carpet);
+
+            if (CarpetId.HasValue)
+                throw new InvalidOperationException("Order item already assigned to a carpet.");
+
+            Carpet = carpet;
+            CarpetId = carpet.CarpetId;
         }
 
-        public void ChangeCleaningType(CleaningType newCleaningType, decimal newPrice)
+        public void ChangeCleaningType(CleaningType newCleaningType)
         {
             if (!Enum.IsDefined(typeof(CleaningType), newCleaningType))
                 throw new ArgumentException("Invalid cleaning type.", nameof(newCleaningType));
 
-            if (newPrice <= 0) throw new ArgumentException("Price must be greater than 0.", nameof(newPrice));
-
-            if (CleaningType == newCleaningType && Price == newPrice) return;
+            if (CleaningType == newCleaningType) return;
 
             CleaningType = newCleaningType;
-            Price = newPrice;
         }
-
     }
 }
