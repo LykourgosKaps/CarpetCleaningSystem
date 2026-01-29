@@ -9,6 +9,10 @@ namespace CarpetCleaningSystem.Domain.Entities
 {
     public class Carpet
     {
+        // Primary Key (DB Identity)
+        public int CarpetId { get; private set; }
+
+        // Business identifier (printed label)
         public int CarpetLabelNumber { get; private set; }
         public decimal Width { get; private set; }
         public decimal Length { get; private set; }
@@ -21,20 +25,22 @@ namespace CarpetCleaningSystem.Domain.Entities
 
         private Carpet(int carpetLabelNumber, decimal width, decimal length, CarpetMaterial material)
         {
-            if (carpetLabelNumber > 0) CarpetLabelNumber = carpetLabelNumber;
-            else throw new ArgumentException("A carpetLabelNumber must be greater than 0.", nameof(carpetLabelNumber));
+            if (carpetLabelNumber <= 0)
+                throw new ArgumentException("Carpet label number must be greater than 0.", nameof(carpetLabelNumber));
 
-            if (width > 0) Width = width;
-            else throw new ArgumentException("Width must be greater than 0.", nameof(width));
+            if (width <= 0)
+                throw new ArgumentException("Width must be greater than 0.", nameof(width));
 
-            if (length > 0) Length = length;
-            else throw new ArgumentException("Length must be greater than 0.", nameof(length));
+            if (length <= 0)
+                throw new ArgumentException("Length must be greater than 0.", nameof(length));
 
             if (!Enum.IsDefined(typeof(CarpetMaterial), material))
                 throw new ArgumentException("Invalid carpet material.", nameof(material));
 
+            CarpetLabelNumber = carpetLabelNumber;
+            Width = width;
+            Length = length;
             Material = material;
-
             IsLocked = false;
         }
 
