@@ -28,10 +28,13 @@ namespace CarpetCleaningSystem.API.Controllers
         }
 
         [HttpGet("{orderId:int}")]
-        public async Task<IActionResult> GetOrderById([FromBody] GetOrderByIdQuery command, CancellationToken ct)
+        public async Task<IActionResult> GetOrderById(int orderId, CancellationToken ct)
         {
-            var response = await _getOrderHandler.Handle(command, ct);
+            var response = await _getOrderHandler.Handle(
+                new GetOrderByIdQuery { OrderId = orderId }, ct);
+
             return Ok(response);
         }
+
     }
 }
