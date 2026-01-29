@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CarpetCleaningSystem.Domain.Enums
 {
-    public enum CarpetMaterial
+    public enum ItemType
     {
         SYNTHETIC,
         HANDMADE_WOOL,
