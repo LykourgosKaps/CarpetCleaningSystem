@@ -5,40 +5,57 @@ namespace CarpetCleaningSystem.Domain.Entities
 {
     public class OrderItem
     {
-        // Primary Key (DB identity)
-        public int OrderItemId { get; private set; }
+        public int OrderItemId { get; private set; } // PK (DB identity)
 
-        // FK προς Carpet (null μέχρι να γίνει παραλαβή / submit)
-        public int? CarpetId { get; private set; }
-        public Carpet? Carpet { get; private set; }
+        public decimal Width { get; private set; }
+        public decimal Length { get; private set; }
 
-        // Τι ζήτησε ο πελάτης
+        // αυτό που είπες: π.χ. Handmade/Blanket/etc (βάλε enum που έχεις ή θα φτιάξεις)
+        public CarpetMaterial Material { get; private set; }  // ή ItemType/CarpetType αν έχεις άλλο enum
+
         public CleaningType CleaningType { get; private set; }
 
         private OrderItem() { } // For EF
 
-        private OrderItem(CleaningType cleaningType)
+        private OrderItem(decimal width, decimal length, CarpetMaterial material, CleaningType cleaningType)
         {
+            if (width <= 0) throw new ArgumentException("Width must be greater than 0.", nameof(width));
+            if (length <= 0) throw new ArgumentException("Length must be greater than 0.", nameof(length));
+
+            if (!Enum.IsDefined(typeof(CarpetMaterial), material))
+                throw new ArgumentException("Invalid material.", nameof(material));
+
             if (!Enum.IsDefined(typeof(CleaningType), cleaningType))
                 throw new ArgumentException("Invalid cleaning type.", nameof(cleaningType));
 
+            Width = width;
+            Length = length;
+            Material = material;
             CleaningType = cleaningType;
-            CarpetId = null;
         }
 
-        public static OrderItem Create(CleaningType cleaningType)
-            => new OrderItem(cleaningType);
+        public static OrderItem Create(decimal width, decimal length, CarpetMaterial material, CleaningType cleaningType)
+            => new OrderItem(width, length, material, cleaningType);
 
-        // Καλείται στο Submit / Receive flow
-        public void AssignCarpet(Carpet carpet)
+        public void ChangeDimensions(decimal newWidth, decimal newLength)
         {
-            ArgumentNullException.ThrowIfNull(carpet);
+            if (newWidth <= 0) throw new ArgumentException("Width must be greater than 0.", nameof(newWidth));
+            if (newLength <= 0) throw new ArgumentException("Length must be greater than 0.", nameof(newLength));
 
-            if (CarpetId.HasValue)
-                throw new InvalidOperationException("Order item already assigned to a carpet.");
+            if (Width == newWidth && Length == newLength) return;
 
-            Carpet = carpet;
-            CarpetId = carpet.CarpetId;
+            Width = newWidth;
+            Length = newLength;
+        }
+
+        public void ChangeMaterial(CarpetMaterial newMaterial)
+        {
+            if (!Enum.IsDefined(typeof(CarpetMaterial), newMaterial))
+                throw new ArgumentException("Invalid material.", nameof(newMaterial));
+
+            if (Material == newMaterial) return;
+
+            Material = newMaterial;
         }
 
         public void ChangeCleaningType(CleaningType newCleaningType)
@@ -50,5 +67,8 @@ namespace CarpetCleaningSystem.Domain.Entities
 
             CleaningType = newCleaningType;
         }
+
+        public decimal Surface => Width * Length;
     }
 }
+
