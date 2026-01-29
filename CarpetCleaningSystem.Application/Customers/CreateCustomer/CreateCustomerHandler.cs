@@ -41,7 +41,10 @@ namespace CarpetCleaningSystem.Application.Customers.CreateCustomer
             // Transaction boundary of the use case
             await _unitOfWork.SaveChangesAsync(ct);
 
-            return new CreateCustomerResponse(customer.CustomerId);
+            return new CreateCustomerResponse
+            {
+                CustomerId = customer.CustomerId
+            };
         }
     }
 }

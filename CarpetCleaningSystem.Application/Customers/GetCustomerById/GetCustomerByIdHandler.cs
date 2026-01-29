@@ -23,12 +23,14 @@ namespace CarpetCleaningSystem.Application.Customers.GetCustomerById
             if (customer is null)
                 throw new CustomerNotFoundException(request.CustomerId);
 
-            return new GetCustomerByIdResponse(
-                customer.CustomerId,
-                customer.FirstName,
-                customer.LastName,
-                customer.PhoneNumber,
-                customer.Address);
+            return new GetCustomerByIdResponse
+            {
+                CustomerId = customer.CustomerId,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                PhoneNumber = customer.PhoneNumber,
+                Address = customer.Address
+            };
         }
     }
 }
