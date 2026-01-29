@@ -28,14 +28,11 @@ namespace CarpetCleaningSystem.Infrastructure.Repositories
 
         public async Task<Order?> GetByIdAsync(int orderId, CancellationToken ct)
         {
-            return await _context.Orders.FindAsync(new object[] { orderId }, ct);
-        }
-
-        public async Task<Order?> GetByIdWithItemsAsync(int orderId, CancellationToken ct)
-        {
             return await _context.Orders
-                .Include(o => o.Items) 
+                .Include(o => o.Items)
                 .FirstOrDefaultAsync(o => o.OrderId == orderId, ct);
         }
+
+
     }
 }
