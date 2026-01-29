@@ -9,6 +9,7 @@ namespace CarpetCleaningSystem.Application.Orders.CreateOrder
 {
     public class CreateOrderResponse
     {
+        public int CustomerId { get; set; }
         public int OrderId { get; set; }
 
         public List<CreateOrderItemResponseDTO> Items { get; set; } = new();

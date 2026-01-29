@@ -13,7 +13,7 @@ namespace CarpetCleaningSystem.Application.Orders.CreateOrder
 
         public decimal Length { get; set; }
 
-        public CarpetMaterial Material { get; set; }
+        public ItemType Material { get; set; }
 
         public CleaningType CleaningType { get; set; }
     }
