@@ -20,17 +20,7 @@ public class CreateOrderHandler
         // Create order (Draft)
         var order = Order.Create(request.CustomerId, request.PickUpDate);
 
-        // Add items
-        foreach (var itemDto in request.Items)
-        {
-            var orderItem = OrderItem.Create(
-                itemDto.Width,
-                itemDto.Length,
-                itemDto.Material,
-                itemDto.CleaningType);
-
-            order.AddItem(orderItem);
-        }
+        
 
         // Persist
         await _orderRepository.AddAsync(order, ct);
