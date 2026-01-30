@@ -14,9 +14,11 @@ namespace CarpetCleaningSystem.Domain.Entities
 
         public int ItemNo { get; private set; }
 
-        public ItemType ItemType { get; private set; }  
+        public ItemType ItemType { get; private set; }
 
         public CleaningType CleaningType { get; private set; }
+
+        public decimal ItemPrice { get; private set; } // persisted locked price
 
         private OrderItem() { } // For EF
 
@@ -37,6 +39,8 @@ namespace CarpetCleaningSystem.Domain.Entities
             Length = length;
             ItemType = itemType;
             CleaningType = cleaningType;
+
+            ItemPrice = 0m; // default πριν γίνει lock
         }
 
         internal static OrderItem Create(int itemNo, decimal width, decimal length, ItemType itemType, CleaningType cleaningType)
@@ -73,7 +77,17 @@ namespace CarpetCleaningSystem.Domain.Entities
             CleaningType = newCleaningType;
         }
 
+        // ΜΟΝΟ το Order (aggregate root) θα το καλεί όταν κλειδώνει τιμές
+        internal void SetLockedPrice(decimal price)
+        {
+            if (price < 0)
+                throw new ArgumentException("Item price cannot be negative.", nameof(price));
+
+            ItemPrice = price;
+        }
+
         public decimal Surface => Width * Length;
     }
 }
+
 
