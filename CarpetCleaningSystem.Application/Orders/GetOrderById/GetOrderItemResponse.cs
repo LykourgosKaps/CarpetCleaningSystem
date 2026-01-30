@@ -9,6 +9,7 @@ namespace CarpetCleaningSystem.Application.Orders.GetOrderById
 {
     public class GetOrderItemResponse
     {
+        public int ItemNo { get; set; }
         public decimal Width { get; set; }
         public decimal Length { get; set; }
         public decimal Surface { get; set; }
