@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using CarpetCleaningSystem.Domain.Enums;
 
-namespace CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeCleaningType
+public class ChangeCleaningTypeCommand
 {
-    internal class ChangeCleaningTypeCommand
-    {
-    }
+    [Required, Range(1, int.MaxValue)]
+    public int OrderId { get; set; }
+
+    [Required, Range(1, int.MaxValue)]
+    public int OrderItemId { get; set; }
+
+    [Required]
+    public CleaningType CleaningType { get; set; }
 }
+
