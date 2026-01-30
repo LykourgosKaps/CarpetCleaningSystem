@@ -20,13 +20,13 @@ public class GetOrderByIdHandler
             OrderId = order.OrderId,
             CustomerId = order.CustomerId,
             PickUpDate = order.PickUpDate,
-            Status = order.Status.ToString(),
+            Status = order.Status,
             Items = order.Items.Select(i => new GetOrderItemResponse
             {
                 Width = i.Width,
                 Length = i.Length,
                 Surface = i.Surface,
-                ItemType = i.Material,
+                ItemType = i.ItemType,
                 CleaningType = i.CleaningType
             }).ToList()
         };

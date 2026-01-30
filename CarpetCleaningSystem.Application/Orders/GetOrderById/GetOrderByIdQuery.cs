@@ -9,7 +9,9 @@ namespace CarpetCleaningSystem.Application.Orders.GetOrderById
 {
     public class GetOrderByIdQuery
     {
+
         [Required]
+        [Range(1, int.MaxValue)]
         public int OrderId { get; set; }
     }
 }
