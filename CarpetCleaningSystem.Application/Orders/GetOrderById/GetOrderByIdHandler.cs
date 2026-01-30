@@ -23,6 +23,7 @@ public class GetOrderByIdHandler
             Status = order.Status,
             Items = order.Items.Select(i => new GetOrderItemResponse
             {
+                ItemNo = i.ItemNo,
                 Width = i.Width,
                 Length = i.Length,
                 Surface = i.Surface,
