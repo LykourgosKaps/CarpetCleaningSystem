@@ -62,7 +62,7 @@ namespace CarpetCleaningSystem.API.Controllers
             return NoContent();
         }
 
-        [HttpPut("{orderId:int}/items/{ITEMnO:int}/dimensions")]
+        [HttpPut("{orderId:int}/items/{itemNo:int}/dimensions")]
         public async Task<IActionResult> ChangeDimensions(
             int orderId, int itemNo,
             [FromBody] ChangeDimensionsCommand command,
