@@ -1,5 +1,6 @@
 ﻿using CarpetCleaningSystem.Application.Orders.CreateOrder;
 using CarpetCleaningSystem.Application.Orders.GetOrderById;
+using CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +14,22 @@ namespace CarpetCleaningSystem.API.Controllers
 
         private readonly GetOrderByIdHandler _getOrderHandler;
 
-        public OrdersController(CreateOrderHandler handler, GetOrderByIdHandler getOrderByIdHandler)
+        private readonly ChangeCleaningTypeHandler _changeCleaningTypeHandler;
+
+        private readonly ChangeMaterialHandler _changeMaterialHandler;
+
+        private readonly ChangeDimensionsHandler _changeDimensionsHandler;
+
+        private readonly ChangePickUpDateHandler _changePickUpDateHandler;
+
+        public OrdersController(CreateOrderHandler handler, GetOrderByIdHandler getOrderByIdHandler, ChangeCleaningTypeHandler changeCleaningTypeHandler, ChangeMaterialHandler changeMaterialHandler, ChangeDimensionsHandler changeDimensionsHandler, ChangePickUpDateHandler changePickUpDateHandler)
         {
             _handler = handler;
             _getOrderHandler = getOrderByIdHandler;
+            _changeCleaningTypeHandler = changeCleaningTypeHandler;
+            _changeMaterialHandler = changeMaterialHandler;
+            _changeDimensionsHandler = changeDimensionsHandler;
+            _changePickUpDateHandler = changePickUpDateHandler;
         }
 
         [HttpPost]
@@ -35,6 +48,58 @@ namespace CarpetCleaningSystem.API.Controllers
 
             return Ok(response);
         }
+
+        [HttpPut("{orderId:int}/items/{orderItemId:int}/material")]
+        public async Task<IActionResult> ChangeMaterial(
+    int orderId, int orderItemId,
+    [FromBody] ChangeMaterialCommand command,
+    CancellationToken ct)
+        {
+            command.OrderId = orderId;
+            command.OrderItemId = orderItemId;
+
+            await _changeMaterialHandler.Handle(command, ct);
+            return NoContent();
+        }
+
+        [HttpPut("{orderId:int}/items/{orderItemId:int}/dimensions")]
+        public async Task<IActionResult> ChangeDimensions(
+            int orderId, int orderItemId,
+            [FromBody] ChangeDimensionsCommand command,
+            CancellationToken ct)
+        {
+            command.OrderId = orderId;
+            command.OrderItemId = orderItemId;
+
+            await _changeDimensionsHandler.Handle(command, ct);
+            return NoContent();
+        }
+
+        [HttpPut("{orderId:int}/items/{orderItemId:int}/cleaning-type")]
+        public async Task<IActionResult> ChangeCleaningType(
+            int orderId, int orderItemId,
+            [FromBody] ChangeCleaningTypeCommand command,
+            CancellationToken ct)
+        {
+            command.OrderId = orderId;
+            command.OrderItemId = orderItemId;
+
+            await _changeCleaningTypeHandler.Handle(command, ct);
+            return NoContent();
+        }
+
+        [HttpPut("{orderId:int}/pickup-date")]
+        public async Task<IActionResult> ChangePickUpDate(
+            int orderId,
+            [FromBody] ChangePickUpDateCommand command,
+            CancellationToken ct)
+        {
+            command.OrderId = orderId;
+
+            await _changePickUpDateHandler.Handle(command, ct);
+            return NoContent();
+        }
+
 
     }
 }
