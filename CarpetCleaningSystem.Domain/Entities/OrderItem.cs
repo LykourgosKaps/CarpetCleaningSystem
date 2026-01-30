@@ -11,26 +11,26 @@ namespace CarpetCleaningSystem.Domain.Entities
         public decimal Length { get; private set; }
 
         
-        public ItemType Material { get; private set; }  
+        public ItemType ItemType { get; private set; }  
 
         public CleaningType CleaningType { get; private set; }
 
         private OrderItem() { } // For EF
 
-        private OrderItem(decimal width, decimal length, ItemType material, CleaningType cleaningType)
+        private OrderItem(decimal width, decimal length, ItemType itemType, CleaningType cleaningType)
         {
             if (width <= 0) throw new ArgumentException("Width must be greater than 0.", nameof(width));
             if (length <= 0) throw new ArgumentException("Length must be greater than 0.", nameof(length));
 
-            if (!Enum.IsDefined(typeof(ItemType), material))
-                throw new ArgumentException("Invalid material.", nameof(material));
+            if (!Enum.IsDefined(typeof(ItemType), itemType))
+                throw new ArgumentException("Invalid material.", nameof(itemType));
 
             if (!Enum.IsDefined(typeof(CleaningType), cleaningType))
                 throw new ArgumentException("Invalid cleaning type.", nameof(cleaningType));
 
             Width = width;
             Length = length;
-            Material = material;
+            ItemType = itemType;
             CleaningType = cleaningType;
         }
 
@@ -53,9 +53,9 @@ namespace CarpetCleaningSystem.Domain.Entities
             if (!Enum.IsDefined(typeof(ItemType), newMaterial))
                 throw new ArgumentException("Invalid material.", nameof(newMaterial));
 
-            if (Material == newMaterial) return;
+            if (ItemType == newMaterial) return;
 
-            Material = newMaterial;
+            ItemType = newMaterial;
         }
 
         public void ChangeCleaningType(CleaningType newCleaningType)

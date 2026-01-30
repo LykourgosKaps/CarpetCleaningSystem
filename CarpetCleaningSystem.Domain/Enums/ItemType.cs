@@ -11,6 +11,5 @@ namespace CarpetCleaningSystem.Domain.Enums
         SYNTHETIC,
         HANDMADE_WOOL,
         MACHINE_MADE_WOOL
-
     }
 }
