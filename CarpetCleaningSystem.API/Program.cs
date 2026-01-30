@@ -5,6 +5,7 @@ using CarpetCleaningSystem.Application.Customers.GetCustomerById;
 using CarpetCleaningSystem.Application.Customers.UpdateCustomer;
 using CarpetCleaningSystem.Application.Orders.CreateOrder;
 using CarpetCleaningSystem.Application.Orders.GetOrderById;
+using CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial;
 using CarpetCleaningSystem.Infrastructure.Persistence;
 using CarpetCleaningSystem.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,10 @@ namespace CarpetCleaningSystem.API
             builder.Services.AddScoped<UpdateCustomerHandler>();
             builder.Services.AddScoped<CreateOrderHandler>();
             builder.Services.AddScoped<GetOrderByIdHandler>();
+            builder.Services.AddScoped<ChangeCleaningTypeHandler>();
+            builder.Services.AddScoped<ChangeDimensionsHandler>();
+            builder.Services.AddScoped<ChangeMaterialHandler>();
+            builder.Services.AddScoped<ChangePickUpDateHandler>();
 
             //  API stuff
             builder.Services.AddAuthorization();
