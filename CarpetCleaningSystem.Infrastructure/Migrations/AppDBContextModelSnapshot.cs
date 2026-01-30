@@ -100,12 +100,12 @@ namespace CarpetCleaningSystem.Infrastructure.Migrations
                     b.Property<int>("CleaningType")
                         .HasColumnType("int");
 
+                    b.Property<int>("ItemType")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Length")
                         .HasPrecision(9, 2)
                         .HasColumnType("decimal(9,2)");
-
-                    b.Property<int>("Material")
-                        .HasColumnType("int");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");

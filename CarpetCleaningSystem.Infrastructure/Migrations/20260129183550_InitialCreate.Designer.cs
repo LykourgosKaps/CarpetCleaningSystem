@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarpetCleaningSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20260129161927_InitialCreate")]
+    [Migration("20260129183550_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -103,12 +103,12 @@ namespace CarpetCleaningSystem.Infrastructure.Migrations
                     b.Property<int>("CleaningType")
                         .HasColumnType("int");
 
+                    b.Property<int>("ItemType")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Length")
                         .HasPrecision(9, 2)
                         .HasColumnType("decimal(9,2)");
-
-                    b.Property<int>("Material")
-                        .HasColumnType("int");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
