@@ -15,5 +15,6 @@ namespace CarpetCleaningSystem.Application.Orders.GetOrderById
         public decimal Surface { get; set; }
         public ItemType ItemType { get; set; }
         public CleaningType CleaningType { get; set; }
+        public decimal ItemPrice { get; set; }
     }
 }

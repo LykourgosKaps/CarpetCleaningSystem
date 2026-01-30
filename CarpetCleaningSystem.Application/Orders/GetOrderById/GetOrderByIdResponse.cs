@@ -15,5 +15,7 @@ namespace CarpetCleaningSystem.Application.Orders.GetOrderById
         public DateTime PickUpDate { get; set; }
         public OrderStatus Status { get; set; } 
         public List<GetOrderItemResponse> Items { get; set; } = new();
+        public decimal TotalPrice { get; set; }
+        public DateTime? PriceLockedAt { get; set; }
     }
 }
