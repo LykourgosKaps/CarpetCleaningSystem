@@ -14,10 +14,10 @@ namespace CarpetCleaningSystem.Application.Orders.CreateOrder
         public int CustomerId { get; set; }
 
         [Required]
-        [MinLength(1)]
+        [MinLength(1, ErrorMessage = "Order must contain at least one item.")]
         public List<CreateOrderItemDTO> Items { get; set; } = new();
 
-        [Required]
         public DateTime PickUpDate { get; set; }
     }
+
 }
