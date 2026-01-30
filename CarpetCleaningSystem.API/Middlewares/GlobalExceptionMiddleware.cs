@@ -34,6 +34,7 @@ namespace CarpetCleaningSystem.API.Middlewares
                 OrderItemNotFoundException => HttpStatusCode.NotFound,
                 PhoneNumberAlreadyInUseException => HttpStatusCode.Conflict,
                 OrderItemsLockedException => HttpStatusCode.Conflict,
+                InvalidOperationException => HttpStatusCode.Conflict,
                 ArgumentException => HttpStatusCode.BadRequest,
                 _ => HttpStatusCode.InternalServerError
             };
@@ -41,9 +42,14 @@ namespace CarpetCleaningSystem.API.Middlewares
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
 
-            var payload = new { message = ex.Message };
+            var problem = new
+            {
+                status = (int)statusCode,
+                title = statusCode.ToString(),
+                detail = ex.Message
+            };
 
-            return context.Response.WriteAsync(JsonSerializer.Serialize(payload));
+            return context.Response.WriteAsync(JsonSerializer.Serialize(problem));
         }
     }
 }
