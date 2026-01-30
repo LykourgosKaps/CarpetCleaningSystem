@@ -43,64 +43,84 @@ namespace CarpetCleaningSystem.Domain.Entities
         public static Order Create(int customerId, DateTime pickUpDate)
             => new Order(customerId, pickUpDate);
 
+        // Helper to get next ItemNo
+        private int GetNextItemNo()
+        {
+            return _items.Any()
+                ? _items.Max(i => i.ItemNo) + 1
+                : 1;
+        }
+
+
+
         private void EnsureCanEditItems()
         {
             if (Status != OrderStatus.DRAFT && Status != OrderStatus.SUBMITTED)
                 throw new InvalidOperationException(CannotEditItemsMessage);
         }
 
-        private OrderItem GetItemOrThrow(int orderItemId)
+        private OrderItem GetItemOrThrowByItemNo(int itemNo)
         {
-            if (orderItemId <= 0)
-                throw new ArgumentException("OrderItemId must be greater than 0.", nameof(orderItemId));
+            if (itemNo <= 0)
+                throw new ArgumentException("ItemNo must be greater than 0.", nameof(itemNo));
 
-            var item = _items.FirstOrDefault(i => i.OrderItemId == orderItemId);
+            var item = _items.FirstOrDefault(i => i.ItemNo == itemNo);
             if (item is null)
-                throw new ArgumentException("Order item not found.", nameof(orderItemId));
+                throw new ArgumentException("Order item not found.", nameof(itemNo));
 
             return item;
         }
 
-        public void AddItem(OrderItem item)
+
+        public void AddItem(decimal width, decimal length, ItemType itemType, CleaningType cleaningType)
         {
             EnsureCanEditItems();
-            ArgumentNullException.ThrowIfNull(item);
+
+            var itemNo = GetNextItemNo();
+
+            var item = OrderItem.Create(
+                itemNo,
+                width,
+                length,
+                itemType,
+                cleaningType);
 
             _items.Add(item);
         }
 
-        public void RemoveItem(int orderItemId)
+
+        public void RemoveItem(int itemNo)
         {
             EnsureCanEditItems();
-            var item = GetItemOrThrow(orderItemId);
+            var item = GetItemOrThrowByItemNo(itemNo);
 
             _items.Remove(item);
         }
 
-        
+
 
 
         // These are the 4 methods - endpoints will call
-        public void ChangeItemDimensions(int orderItemId, decimal newWidth, decimal newLength)
+        public void ChangeItemDimensions(int itemNo, decimal newWidth, decimal newLength)
         {
             EnsureCanEditItems();
-            var item = GetItemOrThrow(orderItemId);
-
+            var item = GetItemOrThrowByItemNo(itemNo);
             item.ChangeDimensions(newWidth, newLength);
         }
 
-        public void ChangeItemMaterial(int orderItemId, ItemType newMaterial)
+
+        public void ChangeItemMaterial(int itemNo, ItemType newMaterial)
         {
             EnsureCanEditItems();
-            var item = GetItemOrThrow(orderItemId);
-
+            var item = GetItemOrThrowByItemNo(itemNo);
             item.ChangeMaterial(newMaterial);
         }
 
-        public void ChangeItemCleaningType(int orderItemId, CleaningType newCleaningType)
+
+        public void ChangeItemCleaningType(int itemNo, CleaningType newCleaningType)
         {
             EnsureCanEditItems();
-            var item = GetItemOrThrow(orderItemId);
+            var item = GetItemOrThrowByItemNo(itemNo);
 
             item.ChangeCleaningType(newCleaningType);
         }
