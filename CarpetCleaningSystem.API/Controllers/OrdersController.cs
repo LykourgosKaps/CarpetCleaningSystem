@@ -62,11 +62,14 @@ namespace CarpetCleaningSystem.API.Controllers
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command, CancellationToken ct)
         {
             var response = await _handler.Handle(command, ct);
-            return Created(string.Empty, response);
+            return CreatedAtAction(
+                    nameof(GetOrderById),
+                    new { orderId = response.OrderId },
+                    response);
 
         }
 
-        [HttpGet("{orderId:int}/order")]
+        [HttpGet("{orderId:int}")]
         public async Task<IActionResult> GetOrderById(int orderId, CancellationToken ct)
         {
             var response = await _getOrderHandler.Handle(

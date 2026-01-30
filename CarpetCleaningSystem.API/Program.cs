@@ -4,9 +4,12 @@ using CarpetCleaningSystem.Application.Abstractions.Services;
 using CarpetCleaningSystem.Application.Customers.CreateCustomer;
 using CarpetCleaningSystem.Application.Customers.GetCustomerById;
 using CarpetCleaningSystem.Application.Customers.UpdateCustomer;
+using CarpetCleaningSystem.Application.Orders.CancelOrder;
+using CarpetCleaningSystem.Application.Orders.CompleteOrder;
 using CarpetCleaningSystem.Application.Orders.CreateOrder;
 using CarpetCleaningSystem.Application.Orders.GetOrderById;
 using CarpetCleaningSystem.Application.Orders.StartProcessing;
+using CarpetCleaningSystem.Application.Orders.SubmitOrder;
 using CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial;
 using CarpetCleaningSystem.Infrastructure.Persistence;
 using CarpetCleaningSystem.Infrastructure.Repositories;
@@ -41,7 +44,10 @@ namespace CarpetCleaningSystem.API
             builder.Services.AddScoped<ChangeDimensionsHandler>();
             builder.Services.AddScoped<ChangeMaterialHandler>();
             builder.Services.AddScoped<ChangePickUpDateHandler>();
+            builder.Services.AddScoped<SubmitOrderHandler>();
             builder.Services.AddScoped<StartProcessingHandler>();
+            builder.Services.AddScoped<CompleteOrderHandler>();
+            builder.Services.AddScoped<CancelOrderHandler>();
 
 
             //  API stuff
