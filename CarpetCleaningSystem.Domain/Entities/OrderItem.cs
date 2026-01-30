@@ -5,6 +5,8 @@ namespace CarpetCleaningSystem.Domain.Entities
 {
     public class OrderItem
     {
+        public int OrderId { get; private set; }
+
         public int OrderItemId { get; private set; } // PK (DB identity)
 
         public decimal Width { get; private set; }
