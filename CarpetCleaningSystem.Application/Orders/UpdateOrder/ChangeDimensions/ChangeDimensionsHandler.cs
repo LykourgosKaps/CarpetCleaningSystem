@@ -1,12 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using CarpetCleaningSystem.Application.Abstractions.Repositories;
+using CarpetCleaningSystem.Application.Exceptions;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeDimensions
+public class ChangeDimensionsHandler
 {
-    internal class ChangeDimensionsHandler
+    private readonly IOrderRepository _orderRepository;
+    private readonly IUnitOfWork _unitOfWork;
+
+    public ChangeDimensionsHandler(IOrderRepository orderRepository, IUnitOfWork unitOfWork)
     {
+        _orderRepository = orderRepository;
+        _unitOfWork = unitOfWork;
+    }
+
+    public async Task Handle(ChangeDimensionsCommand request, CancellationToken ct)
+    {
+        var order = await _orderRepository.GetByIdAsync(request.OrderId, ct)
+            ?? throw new OrderNotFoundException(request.OrderId);
+
+        try
+        {
+            order.ChangeItemDimensions(request.OrderItemId, request.Width, request.Length);
+            await _unitOfWork.SaveChangesAsync(ct);
+        }
+        catch (ArgumentException ex) when (ex.ParamName == "orderItemId")
+        {
+            throw new OrderItemNotFoundException(request.OrderItemId);
+        }
     }
 }
