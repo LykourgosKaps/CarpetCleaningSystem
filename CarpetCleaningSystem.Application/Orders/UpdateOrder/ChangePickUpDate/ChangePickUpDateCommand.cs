@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 
 public class ChangePickUpDateCommand
 {
-    
     [JsonIgnore]
     public int OrderId { get; set; }
 

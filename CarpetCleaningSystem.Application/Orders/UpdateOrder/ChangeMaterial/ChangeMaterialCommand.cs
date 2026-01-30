@@ -11,16 +11,14 @@ namespace CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial
 {
     public class ChangeMaterialCommand
     {
-        
-        
         [JsonIgnore]
         public int OrderId { get; set; }
-
         
         [JsonIgnore]
         public int ItemNo { get; set; }
 
         [Required]
+        [ValidEnum(typeof(ItemType))]
         public ItemType newMaterial { get; set; }
     }
 }
