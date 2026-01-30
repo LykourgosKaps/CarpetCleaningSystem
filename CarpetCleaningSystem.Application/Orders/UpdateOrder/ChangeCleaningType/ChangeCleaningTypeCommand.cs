@@ -7,7 +7,7 @@ public class ChangeCleaningTypeCommand
     public int OrderId { get; set; }
 
     [Required, Range(1, int.MaxValue)]
-    public int OrderItemId { get; set; }
+    public int ItemNo { get; set; }
 
     [Required]
     public CleaningType CleaningType { get; set; }

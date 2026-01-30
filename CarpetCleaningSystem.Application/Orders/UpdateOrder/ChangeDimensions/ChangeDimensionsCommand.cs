@@ -6,7 +6,7 @@ public class ChangeDimensionsCommand
     public int OrderId { get; set; }
 
     [Required, Range(1, int.MaxValue)]
-    public int OrderItemId { get; set; }
+    public int ItemNo { get; set; }
 
     [Required, Range(0.01, 100.00)]
     public decimal Width { get; set; }

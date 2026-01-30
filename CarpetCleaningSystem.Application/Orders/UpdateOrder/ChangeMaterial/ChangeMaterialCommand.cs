@@ -17,7 +17,7 @@ namespace CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial
 
         [Required]
         [Range(1, int.MaxValue)]
-        public int OrderItemId { get; set; }
+        public int ItemNo { get; set; }
 
         [Required]
         public ItemType newMaterial { get; set; }

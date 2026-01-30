@@ -22,12 +22,12 @@ public class ChangeDimensionsHandler
 
         try
         {
-            order.ChangeItemDimensions(request.OrderItemId, request.Width, request.Length);
+            order.ChangeItemDimensions(request.ItemNo, request.Width, request.Length);
             await _unitOfWork.SaveChangesAsync(ct);
         }
-        catch (ArgumentException ex) when (ex.ParamName == "orderItemId")
+        catch (ArgumentException ex) when (ex.ParamName == "itemNo")
         {
-            throw new OrderItemNotFoundException(request.OrderItemId);
+            throw new OrderItemNotFoundException(request.ItemNo);
         }
     }
 }

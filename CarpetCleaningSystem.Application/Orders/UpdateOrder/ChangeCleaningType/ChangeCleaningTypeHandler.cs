@@ -22,12 +22,12 @@ public class ChangeCleaningTypeHandler
 
         try
         {
-            order.ChangeItemCleaningType(request.OrderItemId, request.CleaningType);
+            order.ChangeItemCleaningType(request.ItemNo, request.CleaningType);
             await _unitOfWork.SaveChangesAsync(ct);
         }
-        catch (ArgumentException ex) when (ex.ParamName == "orderItemId")
+        catch (ArgumentException ex) when (ex.ParamName == "itemNo")
         {
-            throw new OrderItemNotFoundException(request.OrderItemId);
+            throw new OrderItemNotFoundException(request.ItemNo);
         }
     }
 }

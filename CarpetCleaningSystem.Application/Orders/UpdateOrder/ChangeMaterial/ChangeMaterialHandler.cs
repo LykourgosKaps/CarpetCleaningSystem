@@ -28,12 +28,12 @@ namespace CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial
 
             try
             {
-                order.ChangeItemMaterial(request.OrderItemId, request.newMaterial);
+                order.ChangeItemMaterial(request.ItemNo, request.newMaterial);
                 await _unitOfWork.SaveChangesAsync(ct);
             }
-            catch (ArgumentException ex) when (ex.ParamName == "orderItemId")
+            catch (ArgumentException ex) when (ex.ParamName == "itemNo")
             {
-                throw new OrderItemNotFoundException(request.OrderItemId);
+                throw new OrderItemNotFoundException(request.ItemNo);
             }
         }
     }
