@@ -49,14 +49,14 @@ namespace CarpetCleaningSystem.API.Controllers
             return Ok(response);
         }
 
-        [HttpPut("{orderId:int}/items/{orderItemId:int}/material")]
+        [HttpPut("{orderId:int}/items/{itemNo:int}/material")]
         public async Task<IActionResult> ChangeMaterial(
-    int orderId, int orderItemId,
-    [FromBody] ChangeMaterialCommand command,
-    CancellationToken ct)
+            int orderId, int itemNo,
+            [FromBody] ChangeMaterialCommand command,
+            CancellationToken ct)
         {
             command.OrderId = orderId;
-            command.OrderItemId = orderItemId;
+            command.ItemNo = itemNo;
 
             await _changeMaterialHandler.Handle(command, ct);
             return NoContent();
@@ -69,20 +69,20 @@ namespace CarpetCleaningSystem.API.Controllers
             CancellationToken ct)
         {
             command.OrderId = orderId;
-            command.OrderItemId = orderItemId;
+            command.ItemNo = orderItemId;
 
             await _changeDimensionsHandler.Handle(command, ct);
             return NoContent();
         }
 
-        [HttpPut("{orderId:int}/items/{orderItemId:int}/cleaning-type")]
+        [HttpPut("{orderId:int}/items/{itemNo:int}/cleaning-type")]
         public async Task<IActionResult> ChangeCleaningType(
             int orderId, int orderItemId,
             [FromBody] ChangeCleaningTypeCommand command,
             CancellationToken ct)
         {
             command.OrderId = orderId;
-            command.OrderItemId = orderItemId;
+            command.ItemNo = orderItemId;
 
             await _changeCleaningTypeHandler.Handle(command, ct);
             return NoContent();
