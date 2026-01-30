@@ -32,6 +32,11 @@ namespace CarpetCleaningSystem.Infrastructure.Persistence.Configurations
 
             builder.Property(oi => oi.CleaningType)
                    .IsRequired();
+
+            builder.Property(i => i.ItemPrice)
+                   .HasPrecision(9, 2)
+                   .IsRequired();
+
         }
     }
 }

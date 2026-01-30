@@ -24,6 +24,14 @@ namespace CarpetCleaningSystem.Infrastructure.Persistence.Configurations
             builder.Property(o => o.Status)
                    .IsRequired();
 
+            builder.Property(o => o.TotalPrice)
+                   .HasPrecision(9, 2)
+                   .IsRequired();
+
+            builder.Property(o => o.PriceLockedAt)
+                   .IsRequired(false);
+
+
             // Order -> OrderItems (1:N)
             builder.HasMany(o => o.Items)
                    .WithOne()
