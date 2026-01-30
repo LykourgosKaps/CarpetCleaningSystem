@@ -1,13 +1,16 @@
 using CarpetCleaningSystem.API.Middlewares;
 using CarpetCleaningSystem.Application.Abstractions.Repositories;
+using CarpetCleaningSystem.Application.Abstractions.Services;
 using CarpetCleaningSystem.Application.Customers.CreateCustomer;
 using CarpetCleaningSystem.Application.Customers.GetCustomerById;
 using CarpetCleaningSystem.Application.Customers.UpdateCustomer;
 using CarpetCleaningSystem.Application.Orders.CreateOrder;
 using CarpetCleaningSystem.Application.Orders.GetOrderById;
+using CarpetCleaningSystem.Application.Orders.StartProcessing;
 using CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial;
 using CarpetCleaningSystem.Infrastructure.Persistence;
 using CarpetCleaningSystem.Infrastructure.Repositories;
+using CarpetCleaningSystem.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -27,6 +30,7 @@ namespace CarpetCleaningSystem.API
             //  Repositories & UoW
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IPricingService, PricingService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<CreateCustomerHandler>();
             builder.Services.AddScoped<GetCustomerByIdHandler>();
@@ -37,6 +41,8 @@ namespace CarpetCleaningSystem.API
             builder.Services.AddScoped<ChangeDimensionsHandler>();
             builder.Services.AddScoped<ChangeMaterialHandler>();
             builder.Services.AddScoped<ChangePickUpDateHandler>();
+            builder.Services.AddScoped<StartProcessingHandler>();
+
 
             //  API stuff
             builder.Services.AddAuthorization();

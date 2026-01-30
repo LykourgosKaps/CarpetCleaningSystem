@@ -1,5 +1,6 @@
 ﻿using CarpetCleaningSystem.Application.Orders.CreateOrder;
 using CarpetCleaningSystem.Application.Orders.GetOrderById;
+using CarpetCleaningSystem.Application.Orders.StartProcessing;
 using CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,15 @@ namespace CarpetCleaningSystem.API.Controllers
 
         private readonly ChangePickUpDateHandler _changePickUpDateHandler;
 
-        public OrdersController(CreateOrderHandler handler, GetOrderByIdHandler getOrderByIdHandler, ChangeCleaningTypeHandler changeCleaningTypeHandler, ChangeMaterialHandler changeMaterialHandler, ChangeDimensionsHandler changeDimensionsHandler, ChangePickUpDateHandler changePickUpDateHandler)
+        private readonly StartProcessingHandler _startProcessingHandler;
+
+        public OrdersController(CreateOrderHandler handler,
+                                GetOrderByIdHandler getOrderByIdHandler, 
+                                ChangeCleaningTypeHandler changeCleaningTypeHandler, 
+                                ChangeMaterialHandler changeMaterialHandler, 
+                                ChangeDimensionsHandler changeDimensionsHandler, 
+                                ChangePickUpDateHandler changePickUpDateHandler,
+                                StartProcessingHandler startProcessingHandler)
         {
             _handler = handler;
             _getOrderHandler = getOrderByIdHandler;
@@ -30,6 +39,7 @@ namespace CarpetCleaningSystem.API.Controllers
             _changeMaterialHandler = changeMaterialHandler;
             _changeDimensionsHandler = changeDimensionsHandler;
             _changePickUpDateHandler = changePickUpDateHandler;
+            _startProcessingHandler = startProcessingHandler;
         }
 
         [HttpPost]
@@ -100,6 +110,12 @@ namespace CarpetCleaningSystem.API.Controllers
             return NoContent();
         }
 
+        [HttpPost("{orderId:int}/start-processing")]
+        public async Task<IActionResult> StartProcessing(int orderId, CancellationToken ct)
+        {
+            await _startProcessingHandler.Handle(new StartProcessingCommand { OrderId = orderId }, ct);
+            return NoContent();
+        }
 
     }
 }
