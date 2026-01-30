@@ -8,8 +8,8 @@ namespace CarpetCleaningSystem.Application.Exceptions
 {
     public class OrderItemNotFoundException : Exception
     {
-        public OrderItemNotFoundException(int orderItemId)
-            : base($"Order item with ID {orderItemId} was not found.")
+        public OrderItemNotFoundException(int itemNo)
+            : base($"Order item with itemNo {itemNo} was not found.")
         {
         }
     }
