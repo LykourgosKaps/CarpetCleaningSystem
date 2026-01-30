@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangePickUpDate
+public class ChangePickUpDateCommand
 {
-    internal class ChangePickUpDateCommand
-    {
-    }
+    [Required, Range(1, int.MaxValue)]
+    public int OrderId { get; set; }
+
+    [Required]
+    public DateTime PickUpDate { get; set; }
 }
