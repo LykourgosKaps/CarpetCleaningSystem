@@ -31,6 +31,7 @@ namespace CarpetCleaningSystem.API.Middlewares
             {
                 CustomerNotFoundException => HttpStatusCode.NotFound,
                 OrderNotFoundException => HttpStatusCode.NotFound,
+                OrderItemNotFoundException => HttpStatusCode.NotFound,
                 PhoneNumberAlreadyInUseException => HttpStatusCode.Conflict,
                 OrderItemsLockedException => HttpStatusCode.Conflict,
                 ArgumentException => HttpStatusCode.BadRequest,
