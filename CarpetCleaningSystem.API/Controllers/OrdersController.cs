@@ -62,14 +62,14 @@ namespace CarpetCleaningSystem.API.Controllers
             return NoContent();
         }
 
-        [HttpPut("{orderId:int}/items/{orderItemId:int}/dimensions")]
+        [HttpPut("{orderId:int}/items/{ITEMnO:int}/dimensions")]
         public async Task<IActionResult> ChangeDimensions(
-            int orderId, int orderItemId,
+            int orderId, int itemNo,
             [FromBody] ChangeDimensionsCommand command,
             CancellationToken ct)
         {
             command.OrderId = orderId;
-            command.ItemNo = orderItemId;
+            command.ItemNo = itemNo;
 
             await _changeDimensionsHandler.Handle(command, ct);
             return NoContent();
@@ -77,12 +77,12 @@ namespace CarpetCleaningSystem.API.Controllers
 
         [HttpPut("{orderId:int}/items/{itemNo:int}/cleaning-type")]
         public async Task<IActionResult> ChangeCleaningType(
-            int orderId, int orderItemId,
+            int orderId, int itemNo,
             [FromBody] ChangeCleaningTypeCommand command,
             CancellationToken ct)
         {
             command.OrderId = orderId;
-            command.ItemNo = orderItemId;
+            command.ItemNo = itemNo;
 
             await _changeCleaningTypeHandler.Handle(command, ct);
             return NoContent();
