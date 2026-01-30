@@ -20,7 +20,7 @@ namespace CarpetCleaningSystem.Infrastructure.Persistence.Configurations
                    .IsRequired()
                    .HasPrecision(9, 2);
 
-            builder.Property(oi => oi.Material)
+            builder.Property(oi => oi.ItemType)
                    .IsRequired();
 
             builder.Property(oi => oi.CleaningType)
