@@ -100,6 +100,9 @@ namespace CarpetCleaningSystem.Infrastructure.Migrations
                     b.Property<int>("CleaningType")
                         .HasColumnType("int");
 
+                    b.Property<int>("ItemNo")
+                        .HasColumnType("int");
+
                     b.Property<int>("ItemType")
                         .HasColumnType("int");
 
@@ -107,7 +110,7 @@ namespace CarpetCleaningSystem.Infrastructure.Migrations
                         .HasPrecision(9, 2)
                         .HasColumnType("decimal(9,2)");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Width")
@@ -116,7 +119,8 @@ namespace CarpetCleaningSystem.Infrastructure.Migrations
 
                     b.HasKey("OrderItemId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId", "ItemNo")
+                        .IsUnique();
 
                     b.ToTable("OrderItems", (string)null);
                 });
@@ -126,7 +130,8 @@ namespace CarpetCleaningSystem.Infrastructure.Migrations
                     b.HasOne("CarpetCleaningSystem.Domain.Entities.Order", null)
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CarpetCleaningSystem.Domain.Entities.Order", b =>
