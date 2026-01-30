@@ -17,8 +17,9 @@ namespace CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial
         [JsonIgnore]
         public int ItemNo { get; set; }
 
+
         [Required]
-        [ValidEnum(typeof(ItemType))]
+        [EnumDataType(typeof(ItemType), ErrorMessage = "Material must be a valid value.")]
         public ItemType newMaterial { get; set; }
     }
 }

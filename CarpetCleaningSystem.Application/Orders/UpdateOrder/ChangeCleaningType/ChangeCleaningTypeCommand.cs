@@ -11,7 +11,7 @@ public class ChangeCleaningTypeCommand
     public int ItemNo { get; set; }
 
     [Required]
-    [ValidEnum(typeof(ItemType))]
+    [EnumDataType(typeof(CleaningType), ErrorMessage = "Cleaning type must be a valid value.")]
     public CleaningType CleaningType { get; set; }
 }
 
