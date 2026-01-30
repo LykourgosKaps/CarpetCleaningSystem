@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace CarpetCleaningSystem.Application.Exceptions
 {
-    public class OrderItemsLockedException : Exception
+    public class OrderItemNotFoundException : Exception
     {
-        public OrderItemsLockedException()
-            : base("Order items cannot be modified after processing has started.")
+        public OrderItemNotFoundException(int orderItemId)
+            : base($"Order item with ID {orderItemId} was not found.")
         {
         }
     }
-
 }
