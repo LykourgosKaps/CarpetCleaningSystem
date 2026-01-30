@@ -12,6 +12,13 @@ namespace CarpetCleaningSystem.Infrastructure.Persistence.Configurations
 
             builder.HasKey(oi => oi.OrderItemId);
 
+            builder.Property(oi => oi.ItemNo)
+                   .IsRequired();
+
+            builder.HasIndex(oi => new { oi.OrderId, oi.ItemNo })
+                   .IsUnique();
+
+
             builder.Property(oi => oi.Width)
                    .IsRequired()
                    .HasPrecision(9, 2);
