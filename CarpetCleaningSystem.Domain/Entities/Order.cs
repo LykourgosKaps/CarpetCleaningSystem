@@ -18,6 +18,11 @@ namespace CarpetCleaningSystem.Domain.Entities
         public DateTime PickUpDate { get; private set; }
         public DateTime? DeliveryDate { get; private set; }
 
+        // Persisted locked pricing
+        public decimal TotalPrice { get; private set; }
+        public DateTime? PriceLockedAt { get; private set; }
+        private bool IsPriceLocked => PriceLockedAt != null;
+
         private const string CannotEditItemsMessage =
             "Cannot modify order items unless the order is in Draft or Submitted status.";
 
@@ -38,6 +43,9 @@ namespace CarpetCleaningSystem.Domain.Entities
             CreatedAt = DateTime.UtcNow;
             PickUpDate = pickUpDate;
             Status = OrderStatus.DRAFT;
+
+            TotalPrice = 0m;
+            PriceLockedAt = null;
         }
 
         public static Order Create(int customerId, DateTime pickUpDate)
@@ -51,12 +59,12 @@ namespace CarpetCleaningSystem.Domain.Entities
                 : 1;
         }
 
-
-
         private void EnsureCanEditItems()
         {
             if (Status != OrderStatus.DRAFT && Status != OrderStatus.SUBMITTED)
                 throw new InvalidOperationException(CannotEditItemsMessage);
+
+   
         }
 
         private OrderItem GetItemOrThrowByItemNo(int itemNo)
@@ -70,7 +78,6 @@ namespace CarpetCleaningSystem.Domain.Entities
 
             return item;
         }
-
 
         public void AddItem(decimal width, decimal length, ItemType itemType, CleaningType cleaningType)
         {
@@ -88,7 +95,6 @@ namespace CarpetCleaningSystem.Domain.Entities
             _items.Add(item);
         }
 
-
         public void RemoveItem(int itemNo)
         {
             EnsureCanEditItems();
@@ -96,9 +102,6 @@ namespace CarpetCleaningSystem.Domain.Entities
 
             _items.Remove(item);
         }
-
-
-
 
         // These are the 4 methods - endpoints will call
         public void ChangeItemDimensions(int itemNo, decimal newWidth, decimal newLength)
@@ -108,7 +111,6 @@ namespace CarpetCleaningSystem.Domain.Entities
             item.ChangeDimensions(newWidth, newLength);
         }
 
-
         public void ChangeItemMaterial(int itemNo, ItemType newMaterial)
         {
             EnsureCanEditItems();
@@ -116,12 +118,10 @@ namespace CarpetCleaningSystem.Domain.Entities
             item.ChangeMaterial(newMaterial);
         }
 
-
         public void ChangeItemCleaningType(int itemNo, CleaningType newCleaningType)
         {
             EnsureCanEditItems();
             var item = GetItemOrThrowByItemNo(itemNo);
-
             item.ChangeCleaningType(newCleaningType);
         }
 
@@ -137,7 +137,6 @@ namespace CarpetCleaningSystem.Domain.Entities
             PickUpDate = newPickUpDate;
         }
 
-
         public void Submit()
         {
             if (Status != OrderStatus.DRAFT)
@@ -149,10 +148,47 @@ namespace CarpetCleaningSystem.Domain.Entities
             Status = OrderStatus.SUBMITTED;
         }
 
-        public void StartProcessing()
+        // One place to lock prices (by ItemNo)
+        public void LockPrices(decimal totalPrice, IReadOnlyDictionary<int, decimal> itemPricesByItemNo)
+        {
+            if (Status != OrderStatus.SUBMITTED)
+                throw new InvalidOperationException("Prices can only be locked when the order is Submitted.");
+
+            if (_items.Count == 0)
+                throw new InvalidOperationException("Cannot lock prices for an order without items.");
+
+            if (IsPriceLocked)
+                throw new InvalidOperationException("Order prices are already locked.");
+
+            if (itemPricesByItemNo is null)
+                throw new ArgumentNullException(nameof(itemPricesByItemNo));
+
+            // Ensure dictionary matches exactly the current items by ItemNo
+            var itemNos = _items.Select(i => i.ItemNo).ToHashSet();
+            if (!itemNos.SetEquals(itemPricesByItemNo.Keys))
+                throw new InvalidOperationException("Item prices must be provided for all order items and only those items.");
+
+            if (totalPrice < 0)
+                throw new ArgumentException("Total price cannot be negative.", nameof(totalPrice));
+
+            foreach (var item in _items)
+            {
+                var price = itemPricesByItemNo[item.ItemNo];
+                item.SetLockedPrice(price); // internal method on OrderItem
+            }
+
+            TotalPrice = totalPrice;
+            PriceLockedAt = DateTime.UtcNow;
+        }
+
+        
+        public void StartProcessing(decimal totalPrice, IReadOnlyDictionary<int, decimal> itemPricesByItemNo)
         {
             if (Status != OrderStatus.SUBMITTED)
                 throw new InvalidOperationException("Order can only move to InProgress from Submitted status.");
+
+            // lock first 
+            LockPrices(totalPrice, itemPricesByItemNo);
 
             Status = OrderStatus.IN_PROGRESS;
         }
@@ -172,11 +208,9 @@ namespace CarpetCleaningSystem.Domain.Entities
                 Status = OrderStatus.CANCELLED;
             else
                 throw new InvalidOperationException("Only Draft or Submitted orders can be cancelled.");
-
         }
-
-
     }
 }
+
 
 
