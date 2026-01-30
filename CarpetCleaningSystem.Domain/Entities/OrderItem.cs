@@ -10,15 +10,17 @@ namespace CarpetCleaningSystem.Domain.Entities
         public decimal Width { get; private set; }
         public decimal Length { get; private set; }
 
-        
+        public int ItemNo { get; private set; }
+
         public ItemType ItemType { get; private set; }  
 
         public CleaningType CleaningType { get; private set; }
 
         private OrderItem() { } // For EF
 
-        private OrderItem(decimal width, decimal length, ItemType itemType, CleaningType cleaningType)
+        private OrderItem(int itemNo, decimal width, decimal length, ItemType itemType, CleaningType cleaningType)
         {
+            if (itemNo <= 0) throw new ArgumentException("Item number must be greater than 0.", nameof(itemNo));
             if (width <= 0) throw new ArgumentException("Width must be greater than 0.", nameof(width));
             if (length <= 0) throw new ArgumentException("Length must be greater than 0.", nameof(length));
 
@@ -28,14 +30,15 @@ namespace CarpetCleaningSystem.Domain.Entities
             if (!Enum.IsDefined(typeof(CleaningType), cleaningType))
                 throw new ArgumentException("Invalid cleaning type.", nameof(cleaningType));
 
+            ItemNo = itemNo;
             Width = width;
             Length = length;
             ItemType = itemType;
             CleaningType = cleaningType;
         }
 
-        public static OrderItem Create(decimal width, decimal length, ItemType material, CleaningType cleaningType)
-            => new OrderItem(width, length, material, cleaningType);
+        internal static OrderItem Create(int itemNo, decimal width, decimal length, ItemType itemType, CleaningType cleaningType)
+            => new OrderItem(itemNo, width, length, itemType, cleaningType);
 
         public void ChangeDimensions(decimal newWidth, decimal newLength)
         {
