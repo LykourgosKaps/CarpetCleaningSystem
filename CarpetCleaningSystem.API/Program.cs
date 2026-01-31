@@ -46,6 +46,19 @@ namespace CarpetCleaningSystem.API
                 .AddEntityFrameworkStores<AppDBContext>()
                 .AddDefaultTokenProviders();
 
+            // CORS policy for React/Vite dev servers
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("WebApp", policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:3000", "http://localhost:5173") // React/Vite dev
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
+
             // JWT Authentication
             builder.Services.AddAuthentication(options =>
             {
@@ -61,7 +74,7 @@ namespace CarpetCleaningSystem.API
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    ValidateIssuerSigningKey = false,
+                    ValidateIssuerSigningKey = true,
 
                     ValidIssuer = jwt["Issuer"],
                     ValidAudience = jwt["Audience"],
@@ -158,6 +171,8 @@ namespace CarpetCleaningSystem.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("WebApp");
 
             app.UseMiddleware<GlobalExceptionMiddleware>();
 
