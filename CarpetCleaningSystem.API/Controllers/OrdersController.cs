@@ -5,6 +5,7 @@ using CarpetCleaningSystem.Application.Orders.GetOrderById;
 using CarpetCleaningSystem.Application.Orders.StartProcessing;
 using CarpetCleaningSystem.Application.Orders.SubmitOrder;
 using CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,8 @@ namespace CarpetCleaningSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,Employee")]
+
     public class OrdersController : ControllerBase
     {
         private readonly CreateOrderHandler _handler;

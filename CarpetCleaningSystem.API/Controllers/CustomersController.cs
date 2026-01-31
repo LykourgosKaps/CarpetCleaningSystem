@@ -1,15 +1,16 @@
 ﻿using CarpetCleaningSystem.Application.Customers.CreateCustomer;
 using CarpetCleaningSystem.Application.Customers.GetCustomerById;
 using CarpetCleaningSystem.Application.Customers.UpdateCustomer;
-using CarpetCleaningSystem.Application.Exceptions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace CarpetCleaningSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
+
     public class CustomersController : ControllerBase
     {
         private readonly CreateCustomerHandler _handler;
