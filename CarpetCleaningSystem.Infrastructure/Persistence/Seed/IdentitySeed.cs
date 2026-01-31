@@ -41,6 +41,29 @@ namespace CarpetCleaningSystem.Infrastructure.Persistence.Seed
                     await userManager.AddToRoleAsync(adminUser, "Admin");
                 }
             }
+
+            var employeeEmail = "employee@carpetcleaning.local";
+            var employeePassword = "Employee123!";
+
+            var employeeUser = await userManager.FindByEmailAsync(employeeEmail);
+
+            if (employeeUser == null)
+            {
+                employeeUser = new IdentityUser
+                {
+                    UserName = employeeEmail,
+                    Email = employeeEmail,
+                    EmailConfirmed = true
+                };
+
+                var result = await userManager.CreateAsync(employeeUser, employeePassword);
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(employeeUser, "Employee");
+                }
+            }
+
         }
     }
 }
