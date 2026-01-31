@@ -1,14 +1,10 @@
 ﻿using CarpetCleaningSystem.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarpetCleaningSystem.Infrastructure.Persistence
 {
-    public class AppDBContext : DbContext
+    public class AppDBContext : IdentityDbContext
     {
         public AppDBContext(DbContextOptions<AppDBContext> options)
             : base(options)
@@ -16,9 +12,7 @@ namespace CarpetCleaningSystem.Infrastructure.Persistence
         }
 
         public DbSet<Customer> Customers => Set<Customer>();
-
         public DbSet<Order> Orders => Set<Order>();
-
         public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,3 +25,4 @@ namespace CarpetCleaningSystem.Infrastructure.Persistence
         }
     }
 }
+
