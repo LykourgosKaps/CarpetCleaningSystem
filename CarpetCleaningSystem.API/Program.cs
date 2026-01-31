@@ -21,14 +21,18 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json.Serialization;
+using CarpetCleaningSystem.Infrastructure.Persistence.Seed;
+
 
 namespace CarpetCleaningSystem.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+
 
             // DbContext
             builder.Services.AddDbContext<AppDBContext>(options =>
@@ -133,6 +137,16 @@ namespace CarpetCleaningSystem.API
 
             if (app.Environment.IsDevelopment())
             {
+                using (var scope = app.Services.CreateScope())
+                {
+                    var services = scope.ServiceProvider;
+
+                    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                    await IdentitySeed.SeedAsync(userManager, roleManager);
+                }
+
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
