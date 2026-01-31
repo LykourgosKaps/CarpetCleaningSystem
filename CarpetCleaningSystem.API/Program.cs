@@ -12,6 +12,7 @@ using CarpetCleaningSystem.Application.Orders.StartProcessing;
 using CarpetCleaningSystem.Application.Orders.SubmitOrder;
 using CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial;
 using CarpetCleaningSystem.Infrastructure.Persistence;
+using CarpetCleaningSystem.Infrastructure.Persistence.Seed;
 using CarpetCleaningSystem.Infrastructure.Repositories;
 using CarpetCleaningSystem.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,9 +20,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
-using CarpetCleaningSystem.Infrastructure.Persistence.Seed;
 
 
 namespace CarpetCleaningSystem.API
@@ -60,14 +61,18 @@ namespace CarpetCleaningSystem.API
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
+                    ValidateIssuerSigningKey = false,
 
                     ValidIssuer = jwt["Issuer"],
                     ValidAudience = jwt["Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwt["Key"]!)
-                    )
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!)),
+                    
+
+                    RoleClaimType = ClaimTypes.Role,
+                    NameClaimType = ClaimTypes.Name
                 };
+
+
             });
 
             // Authorization (Roles live here)
@@ -90,7 +95,8 @@ namespace CarpetCleaningSystem.API
                     Scheme = "bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Βάλε: Bearer {token}"
+                    Description = "Βάλε ΜΟΝΟ το JWT token (χωρίς 'Bearer '). Το Swagger θα προσθέσει μόνο του το Bearer."
+
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
