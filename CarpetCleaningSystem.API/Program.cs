@@ -1,3 +1,5 @@
+using CarpetCleaningSystem.Application.Orders.GetOrders;
+using CarpetCleaningSystem.Application.Orders.UpdateOrder.AddItem;
 using CarpetCleaningSystem.API.Middlewares;
 using CarpetCleaningSystem.Application.Abstractions.Repositories;
 using CarpetCleaningSystem.Application.Abstractions.Services;
@@ -150,6 +152,8 @@ namespace CarpetCleaningSystem.API
             builder.Services.AddScoped<SubmitOrderHandler>();
             builder.Services.AddScoped<StartProcessingHandler>();
             builder.Services.AddScoped<CompleteOrderHandler>();
+builder.Services.AddScoped<GetOrdersHandler>();
+builder.Services.AddScoped<AddItemHandler>();
             builder.Services.AddScoped<CancelOrderHandler>();
 
             var app = builder.Build();

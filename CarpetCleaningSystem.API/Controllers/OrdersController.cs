@@ -2,9 +2,11 @@
 using CarpetCleaningSystem.Application.Orders.CompleteOrder;
 using CarpetCleaningSystem.Application.Orders.CreateOrder;
 using CarpetCleaningSystem.Application.Orders.GetOrderById;
+using CarpetCleaningSystem.Application.Orders.GetOrders;
 using CarpetCleaningSystem.Application.Orders.StartProcessing;
 using CarpetCleaningSystem.Application.Orders.SubmitOrder;
 using CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial;
+using CarpetCleaningSystem.Application.Orders.UpdateOrder.AddItem;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,32 +16,25 @@ namespace CarpetCleaningSystem.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin,Employee")]
-
     public class OrdersController : ControllerBase
     {
         private readonly CreateOrderHandler _handler;
-
+        private readonly AddItemHandler _addItemHandler;
         private readonly GetOrderByIdHandler _getOrderHandler;
-
+        private readonly GetOrdersHandler _getOrdersHandler;
         private readonly ChangeCleaningTypeHandler _changeCleaningTypeHandler;
-
         private readonly ChangeMaterialHandler _changeMaterialHandler;
-
         private readonly ChangeDimensionsHandler _changeDimensionsHandler;
-
         private readonly ChangePickUpDateHandler _changePickUpDateHandler;
-
         private readonly StartProcessingHandler _startProcessingHandler;
-
         private readonly SubmitOrderHandler _submitOrderHandler;
-
         private readonly CompleteOrderHandler _completeOrderHandler;
-
         private readonly CancelOrderHandler _cancelOrderHandler;
 
-
         public OrdersController(CreateOrderHandler handler,
+                                AddItemHandler addItemHandler,
                                 GetOrderByIdHandler getOrderByIdHandler,
+                                GetOrdersHandler getOrdersHandler,
                                 ChangeCleaningTypeHandler changeCleaningTypeHandler,
                                 ChangeMaterialHandler changeMaterialHandler,
                                 ChangeDimensionsHandler changeDimensionsHandler,
@@ -50,7 +45,9 @@ namespace CarpetCleaningSystem.API.Controllers
                                 CancelOrderHandler cancelOrderHandler)
         {
             _handler = handler;
+            _addItemHandler = addItemHandler;
             _getOrderHandler = getOrderByIdHandler;
+            _getOrdersHandler = getOrdersHandler;
             _changeCleaningTypeHandler = changeCleaningTypeHandler;
             _changeMaterialHandler = changeMaterialHandler;
             _changeDimensionsHandler = changeDimensionsHandler;
@@ -69,7 +66,13 @@ namespace CarpetCleaningSystem.API.Controllers
                     nameof(GetOrderById),
                     new { orderId = response.OrderId },
                     response);
+        }
 
+        [HttpGet]
+        public async Task<IActionResult> GetOrders([FromQuery] CarpetCleaningSystem.Domain.Enums.OrderStatus? status, CancellationToken ct)
+        {
+            var response = await _getOrdersHandler.Handle(new GetOrdersQuery { Status = status }, ct);
+            return Ok(response);
         }
 
         [HttpGet("{orderId:int}")]
@@ -77,8 +80,15 @@ namespace CarpetCleaningSystem.API.Controllers
         {
             var response = await _getOrderHandler.Handle(
                 new GetOrderByIdQuery { OrderId = orderId }, ct);
-
             return Ok(response);
+        }
+
+        [HttpPost("{orderId:int}/items")]
+        public async Task<IActionResult> AddItem(int orderId, [FromBody] AddItemCommand command, CancellationToken ct)
+        {
+            command.OrderId = orderId;
+            await _addItemHandler.Handle(command, ct);
+            return NoContent();
         }
 
         [HttpPost("{orderId:int}/submit")]
@@ -96,7 +106,6 @@ namespace CarpetCleaningSystem.API.Controllers
         {
             command.OrderId = orderId;
             command.ItemNo = itemNo;
-
             await _changeMaterialHandler.Handle(command, ct);
             return NoContent();
         }
@@ -109,7 +118,6 @@ namespace CarpetCleaningSystem.API.Controllers
         {
             command.OrderId = orderId;
             command.ItemNo = itemNo;
-
             await _changeDimensionsHandler.Handle(command, ct);
             return NoContent();
         }
@@ -122,7 +130,6 @@ namespace CarpetCleaningSystem.API.Controllers
         {
             command.OrderId = orderId;
             command.ItemNo = itemNo;
-
             await _changeCleaningTypeHandler.Handle(command, ct);
             return NoContent();
         }
@@ -134,7 +141,6 @@ namespace CarpetCleaningSystem.API.Controllers
             CancellationToken ct)
         {
             command.OrderId = orderId;
-
             await _changePickUpDateHandler.Handle(command, ct);
             return NoContent();
         }
@@ -147,6 +153,7 @@ namespace CarpetCleaningSystem.API.Controllers
         }
 
         [HttpPost("{orderId:int}/complete")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CompleteOrder(int orderId, CancellationToken ct)
         {
             await _completeOrderHandler.Handle(new CompleteOrderCommand { OrderId = orderId }, ct);
@@ -158,7 +165,6 @@ namespace CarpetCleaningSystem.API.Controllers
         {
             await _cancelOrderHandler.Handle(new CancelOrderCommand { OrderId = orderId }, ct);
             return NoContent();
-
         }
     }
 }
