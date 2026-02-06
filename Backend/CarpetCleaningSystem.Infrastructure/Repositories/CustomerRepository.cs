@@ -30,6 +30,18 @@ namespace CarpetCleaningSystem.Infrastructure.Repositories
                 .AnyAsync(x => (x.PhoneNumber == phoneNumber && x.CustomerId != excludeCustomerId), ct);
         }
 
+        public async Task<Customer?> GetByPhoneAsync(string phoneNumber, CancellationToken ct)
+        {
+            var phone = phoneNumber.Trim();
+
+            return await _context.Customers
+                .FirstOrDefaultAsync(x =>
+                    x.PhoneNumber != null &&
+                    x.PhoneNumber.Replace("\u00A0", "").Trim() == phone,
+                    ct);
+        }
+
+
         public async Task<Customer?> GetByIdAsync(int customerId, CancellationToken ct)
         {
             return await _context.Customers

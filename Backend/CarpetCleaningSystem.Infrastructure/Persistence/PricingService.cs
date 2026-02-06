@@ -19,7 +19,7 @@ namespace CarpetCleaningSystem.Infrastructure.Services
             var materialRatePerSqm = GetMaterialRatePerSqm(input.ItemType);
 
             var price =
-                cleaningFlatPrice +
+                cleaningFlatPrice *
                 (input.Surface * materialRatePerSqm);
 
             return decimal.Round(price, 2, MidpointRounding.AwayFromZero);
