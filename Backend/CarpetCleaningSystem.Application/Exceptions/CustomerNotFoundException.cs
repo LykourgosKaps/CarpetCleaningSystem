@@ -12,5 +12,10 @@ namespace CarpetCleaningSystem.Application.Exceptions
             : base($"Customer with ID {customerId} was not found.")
         {
         }
+
+        public CustomerNotFoundException(string message)
+            : base(message)
+        {
+        }
     }
 }

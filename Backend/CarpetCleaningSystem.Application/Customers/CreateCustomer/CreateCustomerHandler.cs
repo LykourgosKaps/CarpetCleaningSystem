@@ -23,7 +23,7 @@ namespace CarpetCleaningSystem.Application.Customers.CreateCustomer
 
         public async Task<CreateCustomerResponse> Handle(CreateCustomerCommand request, CancellationToken ct)
         {
-            var phone = request.PhoneNumber.Trim();
+            var phone = new string(request.PhoneNumber.Where(char.IsDigit).ToArray());
 
             var exists = await _customerRepository.ExistsByPhoneAsync(phone, excludeCustomerId: 0,ct);
 

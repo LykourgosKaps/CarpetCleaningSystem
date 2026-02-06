@@ -18,7 +18,6 @@ namespace CarpetCleaningSystem.Application.Customers.UpdateCustomer
         public string LastName { get; set; } = string.Empty;
 
         [Required]
-        [Phone]
         [StringLength(15)]
         public string PhoneNumber { get; set; } = string.Empty;
 

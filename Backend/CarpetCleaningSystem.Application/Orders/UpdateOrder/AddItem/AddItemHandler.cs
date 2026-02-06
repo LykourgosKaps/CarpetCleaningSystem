@@ -22,17 +22,12 @@ namespace CarpetCleaningSystem.Application.Orders.UpdateOrder.AddItem
             var order = await _orderRepository.GetByIdAsync(command.OrderId, ct);
             if (order == null) return;
 
-            var item = new OrderItem
-            {
-                ItemNo = order.Items.Count + 1,
-                Width = command.Width,
-                Length = command.Length,
-                ItemType = (ItemType)command.Material,
-                CleaningType = (CleaningType)command.CleaningType,
-                OrderId = order.OrderId
-            };
+            order.AddItem(
+                (decimal)command.Width,
+                (decimal)command.Length,
+                (ItemType)command.Material,
+                (CleaningType)command.CleaningType);
 
-            order.Items.Add(item);
             await _unitOfWork.SaveChangesAsync(ct);
         }
     }
