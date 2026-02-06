@@ -1,17 +1,18 @@
-using CarpetCleaningSystem.Application.Orders.GetOrders;
-using CarpetCleaningSystem.Application.Orders.UpdateOrder.AddItem;
 using CarpetCleaningSystem.API.Middlewares;
 using CarpetCleaningSystem.Application.Abstractions.Repositories;
 using CarpetCleaningSystem.Application.Abstractions.Services;
 using CarpetCleaningSystem.Application.Customers.CreateCustomer;
 using CarpetCleaningSystem.Application.Customers.GetCustomerById;
+using CarpetCleaningSystem.Application.Customers.LookupCustomerByPhone;
 using CarpetCleaningSystem.Application.Customers.UpdateCustomer;
 using CarpetCleaningSystem.Application.Orders.CancelOrder;
 using CarpetCleaningSystem.Application.Orders.CompleteOrder;
 using CarpetCleaningSystem.Application.Orders.CreateOrder;
 using CarpetCleaningSystem.Application.Orders.GetOrderById;
+using CarpetCleaningSystem.Application.Orders.GetOrders;
 using CarpetCleaningSystem.Application.Orders.StartProcessing;
 using CarpetCleaningSystem.Application.Orders.SubmitOrder;
+using CarpetCleaningSystem.Application.Orders.UpdateOrder.AddItem;
 using CarpetCleaningSystem.Application.Orders.UpdateOrder.ChangeMaterial;
 using CarpetCleaningSystem.Infrastructure.Persistence;
 using CarpetCleaningSystem.Infrastructure.Persistence.Seed;
@@ -143,6 +144,7 @@ namespace CarpetCleaningSystem.API
             builder.Services.AddScoped<CreateCustomerHandler>();
             builder.Services.AddScoped<GetCustomerByIdHandler>();
             builder.Services.AddScoped<UpdateCustomerHandler>();
+            builder.Services.AddScoped<LookupCustomerByPhoneHandler>();
             builder.Services.AddScoped<CreateOrderHandler>();
             builder.Services.AddScoped<GetOrderByIdHandler>();
             builder.Services.AddScoped<ChangeCleaningTypeHandler>();
@@ -152,8 +154,8 @@ namespace CarpetCleaningSystem.API
             builder.Services.AddScoped<SubmitOrderHandler>();
             builder.Services.AddScoped<StartProcessingHandler>();
             builder.Services.AddScoped<CompleteOrderHandler>();
-builder.Services.AddScoped<GetOrdersHandler>();
-builder.Services.AddScoped<AddItemHandler>();
+            builder.Services.AddScoped<GetOrdersHandler>();
+            builder.Services.AddScoped<AddItemHandler>();
             builder.Services.AddScoped<CancelOrderHandler>();
 
             var app = builder.Build();
