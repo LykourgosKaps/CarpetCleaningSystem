@@ -43,10 +43,6 @@ export default function CustomerList() {
         try {
             const res = await client.post("/Customers", newCustomer);
             if (res.status === 201) {
-                // The backend returns the created object differently depending on implementation, 
-                // typically the location header or the body. 
-                // Based on controller: CreatedAtAction(nameof(GetCustomerById), new { customerId = response.CustomerId }, response);
-                // The body should be the response object containing CustomerId.
                 setCreatedCustomerId(res.data.customerId);
 
                 // Reset form
@@ -54,8 +50,24 @@ export default function CustomerList() {
                 setShowCreateForm(false);
             }
         } catch (err) {
-            console.error(err);
-            setCreateError("Failed to create customer. Ensure valid data (Phone max 15, Address min 4 chars).");
+            console.error("Creation Error:", err);
+            let msg = "Failed to create customer.";
+
+            if (err.response?.data?.errors) {
+                // Handle ASP.NET Core Validation Errors (errors object)
+                msg = Object.values(err.response.data.errors).flat().join(" ");
+            } else if (err.response?.data?.detail) {
+                // Handle custom detail message
+                msg = err.response.data.detail;
+            } else if (err.response?.data?.message) {
+                // Handle generic message
+                msg = err.response.data.message;
+            } else {
+                // Fallback
+                msg = "Failed to create customer. Please ensure phone is max 15 and address min 4 chars.";
+            }
+
+            setCreateError(msg);
         }
     };
 
