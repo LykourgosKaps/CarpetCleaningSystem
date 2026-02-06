@@ -9,7 +9,8 @@ namespace CarpetCleaningSystem.Application.Abstractions.Repositories
 {
     public interface ICustomerRepository
     {
-        Task<bool> ExistsByPhoneAsync(string phoneNumber,int excludeCustomerId, CancellationToken ct);
+        Task<bool> ExistsByPhoneAsync(string phoneNumber, int excludeCustomerId, CancellationToken ct);
+        Task<Customer?> GetByPhoneAsync(string phoneNumber, CancellationToken ct);
         Task AddAsync(Customer customer, CancellationToken ct);
 
         Task<Customer?> GetByIdAsync(int customerId, CancellationToken ct);
